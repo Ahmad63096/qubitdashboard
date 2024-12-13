@@ -135,7 +135,7 @@ function Chatanalytics() {
                 <button type="button" className="card-close-btn btn-close" onClick={closeModal} aria-label="Close"></button>
               </div>
               <div className="modal-body text-center">
-                <Chatgraph graphdata={modalData} />
+                <Chatgraph graphdata={modalData.heading} />
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
