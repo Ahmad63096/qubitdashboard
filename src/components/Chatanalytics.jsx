@@ -115,11 +115,11 @@ function Chatanalytics() {
                   heading="Peak Times"
                   value={`${apiData.peak_times[0].hour} - ${apiData.peak_times[0].count} users`}
                   comment={`Data for ${apiData.peak_times.length} peak hours`}
-                  onClick={() => handleCardClick({
-                    heading: "Peak Times",
-                    value: apiData.peak_times,
-                    comment: `Data for ${apiData.peak_times.length} peak hours`,
-                  })}
+                  // onClick={() => handleCardClick({
+                  //   heading: "Peak Times",
+                  //   value: apiData.peak_times,
+                  //   comment: `Data for ${apiData.peak_times.length} peak hours`,
+                  // })}
                 />
               </div>
             </>
