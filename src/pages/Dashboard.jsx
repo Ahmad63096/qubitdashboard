@@ -1,9 +1,9 @@
 import React from "react";
-import user from "../assets/img/user.jpg";
+// import user from "../assets/img/user.jpg";
 import Chatlog from "../components/Chatlog";
 import Chart from "../components/Chart";
-import Calender from "../components/Calender";
-import Leadgen from "../components/Leadgen";
+// import Calender from "../components/Calender";
+// import Leadgen from "../components/Leadgen";
 import Chatanalytics from "../components/Chatanalytics";
 
 function Dashboard() {
@@ -21,11 +21,11 @@ function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div className="row">
+              {/* <div className="row">
                 <div className="col-12" style={{ paddingRight: "0" }}>
                   <Leadgen />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div class="col-sm-12 col-xl-4 mt-5" style={{ paddingLeft: "0" }}>
@@ -37,14 +37,14 @@ function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div className="row py-3">
+              {/* <div className="row py-3">
                 <div className="col-12">
                   <div class="text-center rounded p-4">
                     <Calender />
                   </div>
                 </div>
-              </div>
-              <div className="row py-3">
+              </div> */}
+              {/* <div className="row py-3">
                 <div className="col-12">
                   <div class="text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
@@ -192,7 +192,7 @@ function Dashboard() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

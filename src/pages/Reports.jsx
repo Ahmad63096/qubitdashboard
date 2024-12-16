@@ -65,19 +65,19 @@ function Reports() {
             <form onSubmit={handleSubmit}>
               <div className="mb-3 text-light">
                 <p>How often would you like this report delivered?</p>
-                <input className="mx-1" type="radio" name="reportFrequency" id="oneTime" value="One-time" />
-                <label className="mx-1" htmlFor="oneTime">One-time</label>
-                <input className="mx-1" type="radio" name="reportFrequency" id="regularly" value="Regularly" />
-                <label className="mx-1" htmlFor="regularly">Regularly</label>
+                {/* <input className="mx-1" type="radio" name="reportFrequency" id="oneTime" value="One-time" /> */}
+                {/* <label className="mx-1" htmlFor="oneTime">One-time</label> */}
+                {/* <input className="mx-1" type="radio" name="reportFrequency" id="regularly" value="Regularly" /> */}
+                {/* <label className="mx-1" htmlFor="regularly">Regularly</label> */}
               </div>
 
               <div className="mb-3 ">
                 <label className="form-label" htmlFor="dataSource">Data Source</label>
                 <select name="dataSource" id="dataSource" className="form-select form-control">
                   <option value="chats">Chats</option>
-                  <option value="tickets">Tickets</option>
+                  {/* <option value="tickets">Tickets</option>
                   <option value="goalsAndSales">Goals and Sales</option>
-                  <option value="queueAbandonment">Queue Abandonment</option>
+                  <option value="queueAbandonment">Queue Abandonment</option> */}
                 </select>
               </div>
 
@@ -96,8 +96,8 @@ function Reports() {
                 <label className="form-label" htmlFor="fileFormat">File Format</label>
                 <select name="fileFormat" id="fileFormat" className="form-select form-control">
                   <option value="csv">CSV</option>
-                  <option value="tsv">TSV</option>
-                  <option value="tsvExcel">TSV (Excel)</option>
+                  {/* <option value="tsv">TSV</option>
+                  <option value="tsvExcel">TSV (Excel)</option> */}
                 </select>
               </div>
 

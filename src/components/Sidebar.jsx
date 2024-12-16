@@ -34,12 +34,12 @@ const Sidebar = ({ isDarkMode }) => {
           >
             <i className="fa-solid fa-chart-line"></i>Analytics
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to="/appointment"
             className={({ isActive }) => `nav-item nav-link ${isActive ? 'active' : ''}`}
           >
             <i className="fa-solid fa-calendar-check"></i>Appointment
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to="/reports"
             className={({ isActive }) => `nav-item nav-link ${isActive ? 'active' : ''}`}

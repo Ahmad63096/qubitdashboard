@@ -180,50 +180,138 @@ function Chatgraph({ graphdata }) {
     labels: [],
     dataValues: [],
   });
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const apiInclude =
+  //         graphdata === "Total Chats"
+  //           ? "chat_count"
+  //           : graphdata === "Unique Users"
+  //             ? "unique_users"
+  //             : graphdata === "Peak Times"
+  //               ? "peak_times"
+  //               : "";
+  //       const apiUrl = `https://bot.devspandas.com/api/analytics/last-6-months-chats?include=${apiInclude}`;
+
+  //       const response = await fetch(apiUrl);
+  //       const apiData = await response.json();
+  //       console.log("Raw API Response:", apiData);
+
+  //       let labels = [];
+  //       let dataValues = [];
+
+  //       if (graphdata === "Total Chats") {
+  //         const rawData = apiData.chat_counts || {};
+  //         labels = Object.keys(rawData);
+  //         dataValues = Object.values(rawData);
+  //         setGraphData({
+  //           heading: "Monthly Chat Count",
+  //           labels,
+  //           dataValues,
+  //         });
+  //       } else if (graphdata === "Unique Users") {
+  //         const rawData = apiData.unique_users_counts || {};
+  //         labels = Object.keys(rawData);
+  //         dataValues = Object.values(rawData);
+  //         setGraphData({
+  //           heading: "Monthly Unique Users",
+  //           labels,
+  //           dataValues,
+  //         });
+  //       } else if (graphdata === "Peak Times") {
+  //         const rawData = apiData.peak_times || {};
+  //         const aggregatedData = [];
+  //         for (const [month, entries] of Object.entries(rawData)) {
+  //           for (const [day, count] of entries) {
+  //             aggregatedData.push({ label: `${month} ${day}`, value: count });
+  //           }
+  //         }
+
+  //         labels = aggregatedData.map((item) => item.label);
+  //         dataValues = aggregatedData.map((item) => item.value);
+
+  //         setGraphData({
+  //           heading: "Peak Times",
+  //           labels,
+  //           dataValues,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   }
+
+  //   fetchData();
+  // }, [graphdata]);
   useEffect(() => {
     async function fetchData() {
       try {
-        // Determine the API include parameter based on graphdata
         const apiInclude =
           graphdata === "Total Chats"
             ? "chat_count"
             : graphdata === "Unique Users"
             ? "unique_users"
+            : graphdata === "Peak Times"
+            ? "peak_times"
             : "";
         const apiUrl = `https://bot.devspandas.com/api/analytics/last-6-months-chats?include=${apiInclude}`;
-        
+  
         const response = await fetch(apiUrl);
         const apiData = await response.json();
         console.log("Raw API Response:", apiData);
   
-        // Extract data based on the graphdata type
-        const rawData =
-          graphdata === "Total Chats"
-            ? apiData.chat_counts || {} // Extract chat_counts
-            : graphdata === "Unique Users"
-            ? apiData.unique_users_counts || {} // Extract unique_users_counts
-            : {};
+        let labels = [];
+        let dataValues = [];
   
-        const labels = Object.keys(rawData); // Extract keys as labels
-        const dataValues = Object.values(rawData); // Extract values as data points
+        if (graphdata === "Total Chats") {
+          const rawData = apiData.chat_counts || {};
+          labels = Object.keys(rawData);
+          dataValues = Object.values(rawData);
+          setGraphData({
+            heading: "Monthly Chat Count",
+            labels,
+            dataValues,
+          });
+        } else if (graphdata === "Unique Users") {
+          const rawData = apiData.unique_users_counts || {};
+          labels = Object.keys(rawData);
+          dataValues = Object.values(rawData);
+          setGraphData({
+            heading: "Monthly Unique Users",
+            labels,
+            dataValues,
+          });
+        } else if (graphdata === "Peak Times") {
+          const rawData = apiData.peak_times || {};
+          const aggregatedData = [];
   
-        // Update the graphData state
-        setGraphData({
-          heading:
-            graphdata === "Total Chats"
-              ? "Monthly Chat Count"
-              : "Monthly Unique Users",
-          labels,
-          dataValues,
-        });
+          // Process Peak Times to group by month
+          for (const [month, entries] of Object.entries(rawData)) {
+            if (entries.length > 0) {
+              aggregatedData.push({ label: month, value: null }); // Month label only once
+              for (const [day, count] of entries) {
+                aggregatedData.push({ label: `  ${day}`, value: count }); // Indent days for clarity
+              }
+            }
+          }
+  
+          labels = aggregatedData.map((item) => item.label);
+          dataValues = aggregatedData.map((item) => item.value);
+  
+          setGraphData({
+            heading: "Peak Times",
+            labels,
+            dataValues,
+          });
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
   
     fetchData();
-  }, [graphdata]); // Re-fetch data when graphdata changes
-
+  }, [graphdata]);
+  
   // Chart.js dataset configuration
   const data = {
     labels: graphData.labels,
