@@ -992,3 +992,6 @@ table td {
   color: var(--dark) !important;
   border-radius: 50%;
 }
+.dropdown-item{
+  padding-left: 55px !important;
+}

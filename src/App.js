@@ -15,12 +15,16 @@ import Settings from './pages/Settings.jsx';
 import Login from './pages/Login.jsx';
 import NotFound from './pages/Notfound.jsx';
 import Reports from './pages/Reports.jsx';
+import General from './pages/General.jsx';
+import CreateUserForm from './components/Createnewuser.jsx';
+import Configcode from './components/Configcode.jsx';
+import Policy from './components/Policy.jsx';
 
 function App() {
   const location = useLocation();
   const isLoginPage = location.pathname === '/';
 
-  const validRoutes = ['/', '/dashboard', '/log', '/analytics','/reports', '/lead-gen', '/appointment', '/settings'];
+  const validRoutes = ['/', '/dashboard', '/log', '/analytics','/reports', '/lead-gen', '/appointment', '/settings','/general','/createuser','/configcode','/policy'];
   const isValidRoute = validRoutes.includes(location.pathname);
 
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -65,6 +69,10 @@ function App() {
           <Route path='/appointment' element={<PrivateRoute element={<Appointment />} />} />
           <Route path='/settings' element={<PrivateRoute element={<Settings />} />} />
           <Route path='/reports' element={<PrivateRoute element={<Reports/> } />} />
+          <Route path='/general' element={<PrivateRoute element={ <General/> } />} />
+          <Route path='/createuser' element={<PrivateRoute element={<CreateUserForm/>} />} />
+          <Route path='/configcode' element={<PrivateRoute element={<Configcode/>} />} />
+          <Route path='/policy' element={<PrivateRoute element={ <Policy/> } />} />
         </Routes>
       </div>
     </div>
