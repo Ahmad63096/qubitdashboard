@@ -25,6 +25,7 @@ function Chatgraph({ graphdata }) {
   useEffect(() => {
     async function fetchData() {
       try {
+        const token = localStorage.getItem('authToken');
         const apiInclude =
           graphdata === "Total Chats"
             ? "chat_count"
@@ -34,7 +35,16 @@ function Chatgraph({ graphdata }) {
                 ? "peak_times"
                 : "";
         const apiUrl = `https://bot.devspandas.com/api/analytics/last-6-months-chats?include=${apiInclude}`;
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const apiData = await response.json();
         console.log("Raw API Response:", apiData);
         let labels = [];
@@ -79,31 +89,68 @@ function Chatgraph({ graphdata }) {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    } fetchData();
+    }
+    fetchData();
   }, [graphdata]);
-  // const data = {
-  //   labels: graphData.labels,
-  //   datasets: [
-  //     {
-  //       label: graphData.heading,
-  //       data: graphData.dataValues,
-  //       borderColor: "#29F5FF",
-  //       backgroundColor:
-  //         chartType === "pie"
-  //           ? ["#29F5FF", "#24D3DC", "#FF5722", "#FFC107", "#4CAF50", "#3F51B5"]
-  //           : "#29F5FF",
-  //       hoverBackgroundColor: "#24D3DC",
-  //       fill: chartType === "line",
-  //       borderWidth: 2,
-  //       tension: 0.4,
-  //       pointRadius: 4,
-  //       pointBackgroundColor: "#29F5FF",
-  //       pointBorderColor: "#29F5FF",
-  //       pointHoverBackgroundColor: "#24D3DC",
-  //       pointHoverBorderColor: "#24D3DC",
-  //     },
-  //   ],
-  // };
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const apiInclude =
+  //         graphdata === "Total Chats"
+  //           ? "chat_count"
+  //           : graphdata === "Unique Users"
+  //             ? "unique_users"
+  //             : graphdata === "Peak Times"
+  //               ? "peak_times"
+  //               : "";
+  //       const apiUrl = `https://bot.devspandas.com/api/analytics/last-6-months-chats?include=${apiInclude}`;
+  //       const response = await fetch(apiUrl);
+  //       const apiData = await response.json();
+  //       console.log("Raw API Response:", apiData);
+  //       let labels = [];
+  //       let dataValues = [];
+  //       if (graphdata === "Total Chats") {
+  //         const rawData = apiData.chat_counts || {};
+  //         labels = Object.keys(rawData);
+  //         dataValues = Object.values(rawData);
+  //         setGraphData({
+  //           heading: "Monthly Chat Count",
+  //           labels,
+  //           dataValues,
+  //         });
+  //       } else if (graphdata === "Unique Users") {
+  //         const rawData = apiData.unique_users_counts || {};
+  //         labels = Object.keys(rawData);
+  //         dataValues = Object.values(rawData);
+  //         setGraphData({
+  //           heading: "Monthly Unique Users",
+  //           labels,
+  //           dataValues,
+  //         });
+  //       } else if (graphdata === "Peak Times") {
+  //         const rawData = apiData.peak_times || {};
+  //         const aggregatedData = [];
+  //         for (const [month, entries] of Object.entries(rawData)) {
+  //           if (entries.length > 0) {
+  //             aggregatedData.push({ label: month, value: null });
+  //             for (const [day, count] of entries) {
+  //               aggregatedData.push({ label: `  ${day}`, value: count });
+  //             }
+  //           }
+  //         }
+  //         labels = aggregatedData.map((item) => item.label);
+  //         dataValues = aggregatedData.map((item) => item.value);
+  //         setGraphData({
+  //           heading: "Peak Times",
+  //           labels,
+  //           dataValues,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   } fetchData();
+  // }, [graphdata]);
   const data = {
     labels: graphData.labels,
     datasets: [
@@ -134,29 +181,6 @@ function Chatgraph({ graphdata }) {
       },
     ],
   };
-  // const data = {
-  //   labels: graphData.labels,
-  //   datasets: [
-  //     {
-  //       label: graphData.heading,
-  //       data: graphData.dataValues,
-  //       borderColor: "#E93A63",
-  //       backgroundColor:
-  //         chartType === "pie"
-  //           ? ["#E93A63", "rgba(89, 12, 214, 0.41)"] 
-  //           : "#E93A63", 
-  //       hoverBackgroundColor: "rgba(89, 12, 214, 0.41)", 
-  //       fill: chartType === "line",
-  //       borderWidth: 2,
-  //       tension: 0.4,
-  //       pointRadius: 4,
-  //       pointBackgroundColor: "#E93A63",
-  //       pointBorderColor: "#E93A63",
-  //       pointHoverBackgroundColor: "rgba(89, 12, 214, 0.41)",
-  //       pointHoverBorderColor: "rgba(89, 12, 214, 0.41)",
-  //     },
-  //   ],
-  // };
   const options = {
     responsive: true,
     maintainAspectRatio: false,

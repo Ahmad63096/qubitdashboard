@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { formatTimeAgo } from '../components/Chatlog';
+import handleDownload from '../components/Functions';
 
 function Logs() {
   const [selectedChat, setSelectedChat] = useState(0);
@@ -112,7 +113,6 @@ function Logs() {
       </span>
     ));
   };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -228,6 +228,34 @@ function Logs() {
                         {new Date(`1970-01-01T${filteredMessages[selectedChat].preferred_time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
                       </span>
                     )}
+                    <span className="icons-margin" style={{ marginRight: '10px' }}>
+                      <i
+                        className="fa-solid fa-ellipsis ellipsis-pointer"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      ></i>
+                      <ul
+                        className="dropdown-menu dropdown-menu-end"
+                        style={{ backgroundColor: "white", color: "black" }}
+                      >
+                        <li>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => handleDownload(filteredMessages[selectedChat]._id, "pdf")}
+                          >
+                            <i className="fa-solid fa-file-pdf"></i> Download PDF
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => handleDownload(filteredMessages[selectedChat]._id, "csv")}
+                          >
+                            <i className="fa-solid fa-file-csv"></i> Download CSV
+                          </button>
+                        </li>
+                      </ul>
+                    </span>
                   </div>
                   <div className="chat-history scrollable-container">
                     {filteredMessages[selectedChat].messages.map((chat, index) => (

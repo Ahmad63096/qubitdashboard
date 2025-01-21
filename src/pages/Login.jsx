@@ -68,7 +68,7 @@ function Login() {
       })
       .then((data) => {
         console.log("Login Successful", data);
-        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("authToken", data.access_token);
         setSuccessMessage("Login successful! Redirecting..."); // Set success message
         setTimeout(() => {
           setSuccessMessage(""); // Clear message after 2 seconds

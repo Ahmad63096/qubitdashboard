@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function General() {
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     recipientEmail: "",
     fromEmail: "",
@@ -68,10 +71,12 @@ function General() {
     // }
 
     try {
+      const token = localStorage.getItem('authToken');
       const response = await fetch(process.env.REACT_APP_GENERAL_SETTING, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(formData),
       });
@@ -81,11 +86,15 @@ function General() {
       }
 
       const data = await response.json();
-      alert("Settings saved successfully!");
+      setSuccessMessage("Settings saved successfully!");
+      setTimeout(() => {
+        setSuccessMessage(""); // Clear message after 2 seconds
+        navigate("/general"); // Redirect to dashboard
+      }, 2000);
       console.log(data);
     } catch (error) {
       console.error(error);
-      alert("An error occurred while saving settings.");
+      setSuccessMessage("An error occurred while saving settings.");
     }
   };
   return (
@@ -93,7 +102,7 @@ function General() {
       <form onSubmit={handleSubmit}>
         <div className="container-fluid pt-4 px-4">
           <div className="row rounded mx-0">
-            <div className="col-md-6 p-3">
+                        <div className="col-md-6 p-3">
               <h5 className="mb-3">Emails Will Be Sent To</h5>
               <div className="mb-3">
                 <input
@@ -193,7 +202,7 @@ function General() {
                 </label>
               </div>
             </div>
-            <div className="col-md-6 p-3">
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Show Floating Icon After (x) Seconds</h5>
               <div className="mb-3">
                 <select id="floatingIconDelay" value={formData.floatingIconDelay} className="form-select main-search" onChange={handleChange}>
@@ -205,8 +214,8 @@ function General() {
               <label htmlFor="floatingIconDelay" className="form-label">
                 Seconds
               </label>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Show Floating Notifications Box After (x) Seconds</h5>
               <div>
                 <select id="notificationsDelay" value={formData.notificationsDelay} onChange={handleChange} className="form-select main-search">
@@ -218,7 +227,7 @@ function General() {
               <label htmlFor="notificationsDelay" className="form-label">
                 *This time will be counted after the floating icon appearance.
               </label>
-            </div>
+            </div> */}
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Auto Open Chatbot Window For First Time Page Load</h5>
               <div className="form-check">
@@ -235,7 +244,7 @@ function General() {
                 </label>
               </div>
             </div>
-            <div className="col-md-6 p-3">
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Auto Open Chatbot Window after (x) second.</h5>
               <select id="botResponseDelay" onChange={handleChange} className="form-select main-search">
                 <option value="0">0</option>
@@ -245,7 +254,7 @@ function General() {
               <label htmlFor="botResponseDelay" className="form-label">
                 *This time will be counted after the floating icon appearance.
               </label>
-            </div>
+            </div> */}
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Bot Response Delay</h5>
               <select id="botResponseDelay" value={formData.botResponseDelay} className="form-select main-search" onChange={handleChange}>
@@ -258,7 +267,7 @@ function General() {
               </label>
             </div>
             <div className="col-md-6 p-3"></div>
-            <div className="col-md-6 p-3">
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable Asking For Name Confirmation</h5>
               <div className="form-check">
                 <input
@@ -273,7 +282,7 @@ function General() {
                   Enable Asking for Name Confirmation.
                 </label>
               </div>
-            </div>
+            </div> */}
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable Asking for Email</h5>
               <div className="form-check">
@@ -306,7 +315,7 @@ function General() {
                 </label>
               </div>
             </div>
-            <div className="col-md-6 p-3">
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Phone Number Validity Check</h5>
               <div className="form-check">
                 <input
@@ -321,8 +330,8 @@ function General() {
                   Disable Phone Number Validity Check (useful if you want to use this field to collect other type of information like location by changing the language)
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable Email Subscription Offer</h5>
               <div className="form-check">
                 <input
@@ -337,8 +346,8 @@ function General() {
                   If you enable this option, WPBot will send a eMail to the subscriber. Please edit the content of this eMail from the Language Center-&#62;Email Subscription tab. By including a coupon, eBook or other offer you can get more valid subscriptions this way.
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3"></div>
+            </div> */}
+            {/* <div className="col-md-6 p-3"></div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable First Message</h5>
               <div className="form-check">
@@ -354,8 +363,8 @@ function General() {
                   Disable First Message
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Start Menu altogether</h5>
               <div className="form-check">
                 <input
@@ -370,7 +379,7 @@ function General() {
                   Disable Start Menu altogether.
                 </label>
               </div>
-            </div>
+            </div> */}
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Show Start Menu After Greetings</h5>
               <div className="form-check">
@@ -387,7 +396,7 @@ function General() {
                 </label>
               </div>
             </div>
-            <div className="col-md-6 p-3">
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Skip Greetings and Disable Start Menu</h5>
               <div className="form-check">
                 <input
@@ -402,8 +411,8 @@ function General() {
                   Skip Greetings and Disable Start Menu
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Skip Greetings and Trigger an Intent</h5>
               <div className="form-check">
                 <input
@@ -418,8 +427,8 @@ function General() {
                   Skip Greetings and Trigger an Intent
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Skip Greetings and Show Start Menu</h5>
               <div className="form-check">
                 <input
@@ -434,8 +443,8 @@ function General() {
                   Skip Greetings and Show Start Menu
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Bot on Mobile Device</h5>
               <div className="form-check">
                 <input
@@ -450,8 +459,8 @@ function General() {
                   Disable Bot to Load on Mobile Device
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Auto Focus in Message Area</h5>
               <div className="form-check">
                 <input
@@ -466,8 +475,8 @@ function General() {
                   Disable Auto Focus in Message Area
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Bot Icon Animation</h5>
               <div className="form-check">
                 <input
@@ -482,8 +491,8 @@ function General() {
                   Disable Bot icon border animation
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Avatar Animation in Bot Window</h5>
               <div className="form-check">
                 <input
@@ -498,8 +507,8 @@ function General() {
                   Disable avatar animation in bot window
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable Extended Interface Header Animation</h5>
               <div className="form-check">
                 <input
@@ -514,7 +523,7 @@ function General() {
                   Enable Extended Interface Header Animation
                 </label>
               </div>
-            </div>
+            </div> */}
             <div className="col-md-6 p-3"></div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Persistent Chat History</h5>
@@ -532,7 +541,7 @@ function General() {
                 </label>
               </div>
             </div>
-            <div className="col-md-6 p-3">
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable YouTube link parse</h5>
               <div className="form-check">
                 <input
@@ -547,8 +556,8 @@ function General() {
                   Disable YouTube link parse
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable repetitive asking for Start Menu altogether</h5>
               <div className="form-check">
                 <input
@@ -563,8 +572,8 @@ function General() {
                   Disable repetitive asking for Start Menu altogether
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Replace Repetitive asking for - "You may choose an option from below." with Back to Start Button.</h5>
               <div className="form-check">
                 <input
@@ -579,8 +588,8 @@ function General() {
                   Enable to disable repetitive asking for - "You may choose an option from below."
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Floating Notification Box</h5>
               <div className="form-check">
                 <input
@@ -595,8 +604,8 @@ function General() {
                   Disable Floating Notification Box
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Floating Notification Box for Mobile</h5>
               <div className="form-check">
                 <input
@@ -611,8 +620,8 @@ function General() {
                   Disable Opening notification message for Mobile
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Sound on Page Load</h5>
               <div className="form-check">
                 <input
@@ -627,8 +636,8 @@ function General() {
                   Enable to play sound on initial page load (some browsers may prevent this sound for non user interaction).
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Sound on Each Message from the Bot</h5>
               <div className="form-check">
                 <input
@@ -643,8 +652,8 @@ function General() {
                   Enable to play sound on every message from the bot.
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Keep Chatbot Window Open When Browsing</h5>
               <div className="form-check">
                 <input
@@ -659,9 +668,9 @@ function General() {
                   Keep Chatbot Window Open When Browsing
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3"></div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3"></div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Auto Scroll to Bottom</h5>
               <div className="form-check">
                 <input
@@ -676,8 +685,8 @@ function General() {
                   Auto Scroll to Bottom
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable RTL</h5>
               <div className="form-check">
                 <input
@@ -692,8 +701,8 @@ function General() {
                   Enable RTL (Right-to-Left language) Support for Chat
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Open Full Screen in Mobile</h5>
               <div className="form-check">
                 <input
@@ -708,9 +717,9 @@ function General() {
                   Enable Open Full Screen in Mobile
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3"></div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3"></div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Number Of Search Result to Show</h5>
               <div className="mb-3">
                 <input
@@ -723,8 +732,8 @@ function General() {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Search Result Click to Open in New Window</h5>
               <div className="form-check">
                 <input
@@ -739,8 +748,8 @@ function General() {
                   Enable to open search result in new window
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Dialogflow Response Link Open in Same Window</h5>
               <div className="form-check">
                 <input
@@ -755,15 +764,15 @@ function General() {
                   Enable to open Dialogflow response link in same window
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Search Result Image Size</h5>
               <select id="searchresultimagesize" value={formData.searchresultimagesize} onChange={handleChange} className="form-select main-search">
                 <option value="">Thumbnail</option>
                 <option value="">Passport size</option>
               </select>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable GDPR Compliance</h5>
               <div className="form-check">
                 <input
@@ -778,8 +787,8 @@ function General() {
                   Click to Enable GDPR Compliance
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">GDPR Compliance Text</h5>
               <div className="mb-3">
                 <input
@@ -792,8 +801,8 @@ function General() {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Show Start Menu after (x) Times Attempt No Result</h5>
               <div className="mb-3">
                 <input
@@ -809,9 +818,9 @@ function General() {
               <label htmlFor="timesattemptnoresult" className="form-label">
                 Times
               </label>
-            </div>
-            <div className="col-md-6 p-3"></div>
-            <div className="col-md-12 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3"></div> */}
+            {/* <div className="col-md-12 p-3">
               <h5 className="mb-3">Or trigger a custom message instead of Start Menu after (x) time no result</h5>
               <div className="mb-3">
                 <input
@@ -824,8 +833,8 @@ function General() {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable Chat Bar Position in Right</h5>
               <div className="form-check">
                 <input
@@ -840,8 +849,8 @@ function General() {
                   Enable Chat Bar Position in Right
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Enable Chat Bar Position in Bottom</h5>
               <div className="form-check">
                 <input
@@ -856,8 +865,8 @@ function General() {
                   Enable Chat Bar Position in Bottom
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Floating Notification Box for ChatBar in Right</h5>
               <div className="form-check">
                 <input
@@ -872,8 +881,8 @@ function General() {
                   Disable Floating Notification Box for ChatBar in Right
                 </label>
               </div>
-            </div>
-            <div className="col-md-6 p-3">
+            </div> */}
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Floating Notification Box for ChatBar in Bottom</h5>
               <div className="form-check">
                 <input
@@ -888,11 +897,11 @@ function General() {
                   Disable Floating Notification Box for ChatBar in Bottom
                 </label>
               </div>
-            </div>
-            <div className="col-md-12 p-3">
+            </div> */}
+            {/* <div className="col-md-12 p-3">
               <h5 className="mb-3">Loading Control Options</h5>
-            </div>
-            <div className="col-md-8 p-3 d-flex align-items-center justify-content-evenly">
+            </div> */}
+            {/* <div className="col-md-8 p-3 d-flex align-items-center justify-content-evenly">
               <h5 className="mb-3">Show on Home Page</h5>
               <div className="form-check">
                 <input
@@ -918,8 +927,8 @@ function General() {
                   No
                 </label>
               </div>
-            </div>
-            <div className="col-md-8 p-3 d-flex align-items-center justify-content-evenly">
+            </div> */}
+            {/* <div className="col-md-8 p-3 d-flex align-items-center justify-content-evenly">
               <h5 className="mb-3">Show on blog posts</h5>
               <div className="form-check">
                 <input
@@ -945,7 +954,7 @@ function General() {
                   No
                 </label>
               </div>
-            </div>
+            </div> */}
             <div className="col-md-8 p-3 d-flex align-items-center justify-content-evenly">
               <h5 className="mb-3">Show on Pages</h5>
               <div className="form-check">
@@ -973,7 +982,7 @@ function General() {
                 </label>
               </div>
             </div>
-            <div className="col-md-12 p-3 d-flex align-items-center justify-content-evenly">
+            {/* <div className="col-md-12 p-3 d-flex align-items-center justify-content-evenly">
               <h5 className="mb-3">Exclude from Pages</h5>
               <div className="form-check">
                 <input
@@ -1071,8 +1080,8 @@ function General() {
                   wpwBot Mobile App
                 </label>
               </div>
-            </div>
-            <div className="col-md-12 p-3 d-flex align-items-center justify-content-evenly">
+            </div> */}
+            {/* <div className="col-md-12 p-3 d-flex align-items-center justify-content-evenly">
               <h5 className="mb-3">Exclude from Custom Post</h5>
               <div className="form-check">
                 <input
@@ -1110,8 +1119,8 @@ function General() {
                   product
                 </label>
               </div>
-            </div>
-            <div className="col-md-10 p-3 d-flex align-items-center justify-content-evenly">
+            </div> */}
+            {/* <div className="col-md-10 p-3 d-flex align-items-center justify-content-evenly">
               <h5 className="mb-3">Exclude from Custom Post</h5>
               <div className="form-check">
                 <input
@@ -1125,12 +1134,17 @@ function General() {
                   Enable this option to display the ChatBot only for logged in users
                 </label>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="container-fluid py-4 px-4">
           <div className="rounded-top p-4">
             <div className="row">
+            {successMessage && (
+              <div className="alert alert-success" role="alert">
+                {successMessage}
+              </div>
+            )}
               <div className="col-12">
                 <button className="btn btn-primary mt-3 submit-button">Save Settings</button>
               </div>

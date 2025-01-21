@@ -109,7 +109,7 @@ function CreateUserForm() {
       })
       .catch((error) => {
         console.error("Error occurred:", error);
-        setSuccessMessage(""); // Clear success message on error
+        setSuccessMessage("");
       });
   };
 
@@ -234,5 +234,4 @@ function CreateUserForm() {
     </div>
   );
 }
-
 export default CreateUserForm;

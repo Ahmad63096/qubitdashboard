@@ -6,7 +6,6 @@ import icon1 from "../assets/img/icon1.png";
 import icon2 from "../assets/img/icon2.png";
 import icon3 from "../assets/img/icon3.png";
 import Chatgraph from "../components/Chatgraph";
-
 function Dashboardcard({ number, icon, line, heading, value, comment, onClick }) {
   return (
     <>
@@ -30,14 +29,36 @@ function Dashboardcard({ number, icon, line, heading, value, comment, onClick })
     </>
   );
 }
-
 function Chatanalytics() {
   const [modalData, setModalData] = useState(null);
   const [apiData, setApiData] = useState(null);
+  // useEffect(() => {
+  //   const fetchAnalyticsData = async () => {
+  //     try {
+  //       const response = await fetch(process.env.REACT_APP_API_CHAT_ANALYSIS);
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       const data = await response.json();
+  //       console.log('Analysis API Response:', data);
+  //       setApiData(data);
+  //     } catch (error) {
+  //       console.error('Error fetching analytics data:', error);
+  //     }
+  //   };
+  //   fetchAnalyticsData();
+  // }, []);
   useEffect(() => {
     const fetchAnalyticsData = async () => {
       try {
-        const response = await fetch(process.env.REACT_APP_API_CHAT_ANALYSIS);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(process.env.REACT_APP_API_CHAT_ANALYSIS, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -48,19 +69,15 @@ function Chatanalytics() {
         console.error('Error fetching analytics data:', error);
       }
     };
-
     fetchAnalyticsData();
   }, []);
-
   const handleCardClick = (data) => {
     setModalData(data);
     console.log('graph data', data);
   };
-
   const closeModal = () => {
     setModalData(null);
   };
-
   return (
     <>
       <div className="container-fluid pt-4 px-4">
@@ -72,7 +89,6 @@ function Chatanalytics() {
         <div className="row g-4">
           {apiData && (
             <>
-              {/* Total Chats */}
               <div className="col-12 col-md-6 col-xl-4">
                 <Dashboardcard
                   number="one"
@@ -88,8 +104,6 @@ function Chatanalytics() {
                   })}
                 />
               </div>
-
-              {/* Unique Users */}
               <div className="col-12 col-md-6 col-xl-4">
                 <Dashboardcard
                   number="two"
@@ -105,8 +119,6 @@ function Chatanalytics() {
                   })}
                 />
               </div>
-
-              {/* Peak Times */}
               <div className="col-12 col-md-6 col-xl-4">
                 <Dashboardcard
                   number="three"
@@ -115,11 +127,6 @@ function Chatanalytics() {
                   heading="Peak Times"
                   value={`${apiData.peak_times[0].hour} - ${apiData.peak_times[0].count} users`}
                   comment={`Data for ${apiData.peak_times.length} peak hours`}
-                  // onClick={() => handleCardClick({
-                  //   heading: "Peak Times",
-                  //   value: apiData.peak_times,
-                  //   comment: `Data for ${apiData.peak_times.length} peak hours`,
-                  // })}
                 />
               </div>
             </>
@@ -147,5 +154,4 @@ function Chatanalytics() {
     </>
   );
 }
-
 export default Chatanalytics;
