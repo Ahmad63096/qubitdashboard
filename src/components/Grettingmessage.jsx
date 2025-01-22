@@ -193,10 +193,12 @@ function GreetingMessage() {
     console.log('Form data being submitted:', payload);
 
     try {
+      const token = localStorage.getItem("authToken");
       const response = await fetch(process.env.REACT_APP_API_GRETTINGURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(payload),
       });
