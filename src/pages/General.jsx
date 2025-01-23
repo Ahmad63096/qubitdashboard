@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 function General() {
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     recipientEmail: "",
     fromEmail: "",
@@ -18,6 +21,45 @@ function General() {
     disablepersistentchathistory: false,
     showOnHomePage: "allpages",
   });
+
+  // Fetch API data and update form
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch("https://bot.devspandas.com/api/panel/control-panel-settings/");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch settings");
+        }
+
+        const data = await response.json();
+console.log('get data:',data);
+        // Assuming the API response matches `formData` structure
+        setFormData({
+          recipientEmail: data.data.recipientEmail || "",
+          fromEmail: data.data.fromEmail || "",
+          fromName: data.data.fromName || "",
+          replyTo: data.data.replyTo || "",
+          disableBot: data.data.disableBot || false,
+          floatingIcon: data.data.floatingIcon || false,
+          autoOpenChatbot: data.data.autoOpenChatbot || false,
+          botResponseDelay: data.data.botResponseDelay || "0",
+          askEmail: data.data.askEmail || false,
+          askPhone: data.data.askPhone || false,
+          menuAfterGreetings: data.data.menuAfterGreetings || false,
+          disablepersistentchathistory: data.data.disablepersistentchathistory || false,
+          showOnHomePage: data.data.showOnHomePage || "allpages",
+        });
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+      } finally {
+        setLoading(false); // Hide loader once data is fetched
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
     setFormData({
@@ -25,16 +67,16 @@ function General() {
       [id]: type === "checkbox" ? checked : value,
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('general setting data', formData);
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
       const response = await fetch(process.env.REACT_APP_GENERAL_SETTING, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
@@ -43,18 +85,21 @@ function General() {
         throw new Error("Failed to save settings");
       }
 
-      const data = await response.json();
+      // const data = await response.json();
       setSuccessMessage("Settings saved successfully!");
       setTimeout(() => {
         setSuccessMessage("");
         navigate("/general");
       }, 2000);
-      console.log(data);
     } catch (error) {
-      console.error(error);
+      console.error("Error saving settings:", error);
       setSuccessMessage("An error occurred while saving settings.");
     }
   };
+
+  if (loading) {
+    return <div>Loading settings...</div>; // Show a loader while fetching data
+  }
   return (
     <>
       <form onSubmit={handleSubmit}>
