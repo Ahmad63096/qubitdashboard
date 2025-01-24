@@ -500,12 +500,15 @@ button {
   position: relative;
 
 }
-.icons-margin ul li .dropdown-item{
+
+.icons-margin ul li .dropdown-item {
   color: var(--primary) !important;
 }
-.icons-margin ul li .dropdown-item:hover{
+
+.icons-margin ul li .dropdown-item:hover {
   color: var(--second) !important;
 }
+
 .chatlog-container .dot {
   position: absolute;
   top: -24px;
@@ -996,14 +999,17 @@ table td {
   color: var(--dark) !important;
   border-radius: 50%;
 }
-.dropdown-item{
+
+.dropdown-item {
   padding-left: 55px !important;
 }
-table th{
+
+table th {
   background-color: inherit !important;
   color: inherit !important;
   border: inherit;
 }
-table td{
+
+table td {
   border: inherit;
 }
