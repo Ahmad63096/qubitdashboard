@@ -1,51 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 function Qubit() {
-
-
-
-const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    recipientEmail: "",
+  const [settings, setSettings] = useState({
+    company_name: "",
     fromEmail: "",
+    smtp_password: "",
     fromName: "",
-    replyTo: "",
+    chatbot_name: "",
+    botResponseDelay: "0",
+    tone: "",
     disableBot: false,
     floatingIcon: false,
     autoOpenChatbot: false,
-    botResponseDelay: "0",
-    askEmail: false,
-    askPhone: false,
     menuAfterGreetings: false,
     disablepersistentchathistory: false,
-    showOnHomePage: "allpages",
+    greeting_message: "",
+    farewell_message: ""
   });
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch("https://bot.devspandas.com/api/panel/control-panel-settings/");
+        const response = await fetch("https://bot.devspandas.com/api/panel/control-panel-settings?bot_type=qubit");
         if (!response.ok) {
           throw new Error("Failed to fetch settings");
         }
         const data = await response.json();
-        console.log('get data:', data);
-        setFormData({
-          recipientEmail: data.data.recipientEmail || "",
-          fromEmail: data.data.fromEmail || "",
-          fromName: data.data.fromName || "",
-          replyTo: data.data.replyTo || "",
-          disableBot: data.data.disableBot || false,
-          floatingIcon: data.data.floatingIcon || false,
-          autoOpenChatbot: data.data.autoOpenChatbot || false,
-          botResponseDelay: data.data.botResponseDelay || "0",
-          askEmail: data.data.askEmail || false,
-          askPhone: data.data.askPhone || false,
-          menuAfterGreetings: data.data.menuAfterGreetings || false,
-          disablepersistentchathistory: data.data.disablepersistentchathistory || false,
-          showOnHomePage: data.data.showOnHomePage || "allpages",
+        console.log('get data:', data.data.settings);
+        setSettings({
+          company_name: data.data.settings.company_name || "",
+          fromEmail: data.data.settings.fromEmail || "",
+          smtp_password: data.data.settings.smtp_password || "",
+          fromName: data.data.settings.fromName || "",
+          chatbot_name: data.data.settings.chatbot_name || "",
+          botResponseDelay: data.data.settings.botResponseDelay || "0",
+          tone: data.data.settings.tone || "",
+          disableBot: data.data.settings.disableBot || false,
+          floatingIcon: data.data.settings.floatingIcon || false,
+          autoOpenChatbot: data.data.settings.autoOpenChatbot || false,
+          menuAfterGreetings: data.data.settings.menuAfterGreetings || false,
+          disablepersistentchathistory: data.data.settings.disablepersistentchathistory || false,
+          greeting_message: data.data.settings.greeting_message || "",
+          farewell_message: data.data.settings.farewell_message || ""
         });
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -57,22 +56,23 @@ const [successMessage, setSuccessMessage] = useState("");
   }, []);
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setSettings({
+      ...settings,
       [id]: type === "checkbox" ? checked : value,
     });
   };
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault();    
+    console.log("Submit data:", settings);
     try {
       const token = localStorage.getItem("authToken");
-      const response = await fetch(process.env.REACT_APP_GENERAL_SETTING, {
+      const response = await fetch("https://bot.devspandas.com/api/panel/create-control-panel-settings?bot_type=qubit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(settings),
       });
       if (!response.ok) {
         throw new Error("Failed to save settings");
@@ -96,19 +96,19 @@ const [successMessage, setSuccessMessage] = useState("");
         <div className="container-fluid pt-4 px-4">
           <div className="row rounded mx-0">
             <div className="col-md-6 p-3">
-              <h5 className="mb-3">Emails Will Be Sent To</h5>
+              <h5 className="mb-3">Name of Company</h5>
               <div className="mb-3">
                 <input
-                  type="email"
-                  id="recipientEmail"
+                  type="text"
+                  id="company_name"
                   className="form-control main-search"
-                  placeholder="faizan@gmail.com"
+                  placeholder="enter name . . . "
                   aria-label="Recipient Email"
-                  value={formData.recipientEmail}
+                  value={settings.company_name}
                   onChange={handleChange}
                 />
               </div>
-              <label htmlFor="recipientEmail" className="form-label">
+              <label htmlFor="company_name" className="form-label">
                 *Support and Call Back requests will be sent to this address
               </label>
             </div>
@@ -121,7 +121,7 @@ const [successMessage, setSuccessMessage] = useState("");
                   className="form-control main-search"
                   placeholder="wordpress@localhost"
                   aria-label="From Email Address"
-                  value={formData.fromEmail}
+                  value={settings.fromEmail}
                   onChange={handleChange}
                 />
               </div>
@@ -134,16 +134,16 @@ const [successMessage, setSuccessMessage] = useState("");
               <div className="input-group">
                 <input
                   type={show ? "text" : "password"}
-                  id="smtppassword"
+                  id="smtp_password"
                   className="form-control main-search"
                   aria-label="From Email Address"
                   placeholder="Password . . ."
-                // value={formData.fromEmail}
-                // onChange={handleChange}
+                  value={settings.smtp_password}
+                  onChange={handleChange}
                 />
-                <button type="button" class="input-group-text eyebutton" onClick={() => setShow(!show)} style={{ cursor: 'pointer' }}><i class={show ? "fas fa-eye" : "fas fa-eye-slash"}></i></button>
+                <button type="button" className="input-group-text eyebutton" onClick={() => setShow(!show)} style={{ cursor: 'pointer' }}><i className={show ? "fas fa-eye" : "fas fa-eye-slash"}></i></button>
               </div>
-              <label htmlFor="smtppassword" className="form-label">
+              <label htmlFor="smtp_password" className="form-label">
                 SMTP Password
               </label>
             </div>
@@ -156,7 +156,7 @@ const [successMessage, setSuccessMessage] = useState("");
                   className="form-control main-search"
                   placeholder="Wordpress"
                   aria-label="From Name"
-                  value={formData.fromName}
+                  value={settings.fromName}
                   onChange={handleChange}
                 />
               </div>
@@ -165,25 +165,25 @@ const [successMessage, setSuccessMessage] = useState("");
               </label>
             </div>
             <div className="col-md-6 p-3">
-              <h5 className="mb-3">Reply To</h5>
+              <h5 className="mb-3">Bot name</h5>
               <div>
                 <input
-                  type="email"
-                  id="replyTo"
+                  type="text"
+                  id="chatbot_name"
                   className="form-control main-search"
-                  placeholder="reply@example.com"
+                  placeholder="name . . . "
                   aria-label="Reply To Address"
-                  value={formData.replyTo}
+                  value={settings.chatbot_name}
                   onChange={handleChange}
                 />
               </div>
-              <label htmlFor="replyTo" className="form-label">
+              <label htmlFor="chatbot_name" className="form-label">
                 *Please set the Reply To address. By default, Reply To address will be From Email Address.
               </label>
             </div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Bot Response Delay</h5>
-              <select id="botResponseDelay" value={formData.botResponseDelay} className="form-select main-search" onChange={handleChange}>
+              <select id="botResponseDelay" value={settings.botResponseDelay} className="form-select main-search" onChange={handleChange}>
                 <option value="0">0 Second</option>
                 <option value="5">5 Second</option>
                 <option value="10">10 Second</option>
@@ -195,14 +195,14 @@ const [successMessage, setSuccessMessage] = useState("");
             </div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Tone</h5>
-              <select id="bottone"
-                // value={formData.botResponseDelay} 
+              <select id="tone"
+                value={settings.tone}
                 className="form-select main-search" onChange={handleChange}>
                 <option value="professional">Professional</option>
                 <option value="formal">Formal</option>
                 <option value="friendly">Friendly</option>
               </select>
-              <label htmlFor="bottone" className="form-label">
+              <label htmlFor="tone" className="form-label">
                 Change behaviour of bot
               </label>
             </div>
@@ -215,7 +215,7 @@ const [successMessage, setSuccessMessage] = useState("");
                   role="switch"
                   className="form-check-input"
                   aria-label="Disable ChatBot"
-                  checked={formData.disableBot}
+                  checked={settings.disableBot}
                   onChange={handleChange}
                 />
                 <label htmlFor="disableBot" className="form-check-label">
@@ -232,7 +232,7 @@ const [successMessage, setSuccessMessage] = useState("");
                   role="switch"
                   className="form-check-input"
                   aria-label="Enable Floating Icon"
-                  checked={formData.floatingIcon}
+                  checked={settings.floatingIcon}
                   onChange={handleChange}
                 />
                 <label htmlFor="floatingIcon" className="form-check-label">
@@ -249,45 +249,11 @@ const [successMessage, setSuccessMessage] = useState("");
                   role="switch"
                   className="form-check-input"
                   aria-label="Auto Open Chatbot"
-                  checked={formData.autoOpenChatbot}
+                  checked={settings.autoOpenChatbot}
                   onChange={handleChange}
                 />
                 <label htmlFor="autoOpenChatbot" className="form-check-label">
                   Enable to open chatbot window automatically for first time page load.
-                </label>
-              </div>
-            </div>
-            <div className="col-md-6 p-3">
-              <h5 className="mb-3">Enable Asking for Email</h5>
-              <div className="form-check form-switch">
-                <input
-                  type="checkbox"
-                  id="askEmail"
-                  role="switch"
-                  className="form-check-input"
-                  aria-label="Enable Floating Icon"
-                  checked={formData.askEmail}
-                  onChange={handleChange}
-                />
-                <label htmlFor="floatingIcon" className="form-check-label">
-                  Enable Asking for Email
-                </label>
-              </div>
-            </div>
-            <div className="col-md-6 p-3">
-              <h5 className="mb-3">Enable Asking for Phone Number</h5>
-              <div className="form-check form-switch">
-                <input
-                  type="checkbox"
-                  id="askPhone"
-                  role="switch"
-                  className="form-check-input"
-                  aria-label="Enable Floating Icon"
-                  checked={formData.askPhone}
-                  onChange={handleChange}
-                />
-                <label htmlFor="floatingIcon" className="form-check-label">
-                  Enable Asking for Phone
                 </label>
               </div>
             </div>
@@ -298,7 +264,7 @@ const [successMessage, setSuccessMessage] = useState("");
                   type="checkbox"
                   role="switch"
                   id="menuAfterGreetings"
-                  checked={formData.menuAfterGreetings}
+                  checked={settings.menuAfterGreetings}
                   className="form-check-input"
                   aria-label="Enable Floating Icon"
                   onChange={handleChange}
@@ -316,7 +282,7 @@ const [successMessage, setSuccessMessage] = useState("");
                   id="disablepersistentchathistory"
                   className="form-check-input"
                   role="switch"
-                  checked={formData.disablepersistentchathistory}
+                  checked={settings.disablepersistentchathistory}
                   aria-label="Enable Floating Icon"
                   onChange={handleChange}
                 />
@@ -325,54 +291,20 @@ const [successMessage, setSuccessMessage] = useState("");
                 </label>
               </div>
             </div>
-            <div className="col-md-8 p-3 d-flex align-items-center justify-content-evenly">
-              <h5 className="mb-3">Show on Pages</h5>
-              <div className="form-check">
-                <input
-                  type="radio"
-                  id="showOnHomePageYes"
-                  name="showOnHomePage"
-                  className="form-check-input"
-                  value="allpages"
-                  checked={formData.showOnHomePage === "allpages"}
-                  onChange={(e) =>
-                    setFormData({ ...formData, showOnHomePage: e.target.value })
-                  }
-                />
-                <label htmlFor="showOnHomePageYes" className="form-check-label">
-                  All Pages
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  type="radio"
-                  id="showOnHomePageNo"
-                  name="showOnHomePage"
-                  className="form-check-input"
-                  value="selectedpagesonly"
-                  checked={formData.showOnHomePage === "selectedpagesonly"}
-                  onChange={(e) =>
-                    setFormData({ ...formData, showOnHomePage: e.target.value })
-                  }
-                />
-                <label htmlFor="showOnHomePageNo" className="form-check-label">
-                  Selected Pages Only
-                </label>
-              </div>
-            </div>
+            <div className="col-md-6 p-3"></div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Greeting Message</h5>
               <div className="mb-3">
                 <textarea
-                  id="greetingmessage"
+                  id="greeting_message"
                   className="form-control main-search"
                   placeholder="Message here . . ."
                   aria-label="Recipient Email"
-                  //value={formData.recipientEmail} 
+                  value={settings.greeting_message}
                   onChange={handleChange}
                 ></textarea>
               </div>
-              <label htmlFor="recipientEmail" className="form-label">
+              <label htmlFor="greeting_message" className="form-label">
                 *Write your first greeting message.
               </label>
             </div>
@@ -381,15 +313,15 @@ const [successMessage, setSuccessMessage] = useState("");
               <h5 className="mb-3">Farewell Message</h5>
               <div className="mb-3">
                 <textarea
-                  id="ferewellmessage"
+                  id="farewell_message"
                   className="form-control main-search"
                   placeholder="Message here . . ."
                   aria-label="Recipient Email"
-                  //value={formData.recipientEmail} 
+                  value={settings.farewell_message}
                   onChange={handleChange}
                 ></textarea>
               </div>
-              <label htmlFor="recipientEmail" className="form-label">
+              <label htmlFor="farewell_message" className="form-label">
                 *Write your Farewell message.
               </label>
             </div>

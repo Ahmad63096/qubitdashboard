@@ -13,13 +13,13 @@ function General() {
           <div className="col-md-6 p-3">
             <select id="componentSelector" className="form-select main-search" value={selectedOption} onChange={handleSelectChange}>
               <option value="qubit">Qubit</option>
-              <option value="ecom">Ecom</option>
+              <option value="qubit_ecom">Ecom</option>
             </select>
           </div>
         </div>
       </div>
       {selectedOption === "qubit" && <Qubit />}
-      {selectedOption === "ecom" && <Ecom />}
+      {selectedOption === "qubit_ecom" && <Ecom />}
     </>
   );
 }
