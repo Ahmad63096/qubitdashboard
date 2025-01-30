@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Qubit from "../components/Qubit";
-import Ecom from "../components/Ecom";
 function General() {
-  const [selectedOption, setSelectedOption] = useState("qubit");
+  const [selectedOption, setSelectedOption] = useState("qubit_devpandas");
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -12,16 +11,16 @@ function General() {
         <div className="row rounded mx-0">
           <div className="col-md-6 p-3">
             <select id="componentSelector" className="form-select main-search" value={selectedOption} onChange={handleSelectChange}>
-              <option value="qubit">Qubit Devpandas</option>
+              <option value="qubit_devpandas">Qubit Devpandas</option>
+              <option value="qubit">Qubit</option>
               <option value="qubit_ecom">Ecom</option>
-              <option value="qubit_devpandas">Qubit</option>
             </select>
           </div>
         </div>
       </div>
-      {selectedOption === "qubit" && <Qubit />}
-      {selectedOption === "qubit_ecom" && <Ecom />}
-      {selectedOption === "qubit_devpandas" && <Ecom />}
+      {selectedOption === "qubit" && <Qubit bot_type={selectedOption} />}
+      {selectedOption === "qubit_ecom" && <Qubit bot_type={selectedOption} />}
+      {selectedOption === "qubit_devpandas" && <Qubit bot_type={selectedOption} />}
     </>
   );
 }

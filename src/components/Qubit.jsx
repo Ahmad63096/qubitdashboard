@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-function Qubit() {
+function Qubit({bot_type}) {
   const [successMessage, setSuccessMessage] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -21,10 +21,11 @@ function Qubit() {
     greeting_message: "",
     farewell_message: ""
   });
+  console.log("bot type: " , bot_type);
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch("https://bot.devspandas.com/api/panel/control-panel-settings?bot_type=qubit");
+        const response = await fetch(`https://bot.devspandas.com/api/panel/control-panel-settings?bot_type=${bot_type}`);
         if (!response.ok) {
           throw new Error("Failed to fetch settings");
         }
@@ -53,6 +54,7 @@ function Qubit() {
       }
     };
     fetchSettings();
+    // eslint-disable-next-line 
   }, []);
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -66,7 +68,7 @@ function Qubit() {
     console.log("Submit data:", settings);
     try {
       const token = localStorage.getItem("authToken");
-      const response = await fetch("https://bot.devspandas.com/api/panel/create-control-panel-settings?bot_type=qubit", {
+      const response = await fetch(`https://bot.devspandas.com/api/panel/create-control-panel-settings?bot_type=${bot_type}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,6 +97,9 @@ function Qubit() {
       <form onSubmit={handleSubmit}>
         <div className="container-fluid pt-4 px-4">
           <div className="row rounded mx-0">
+            {/* <div className="col-md-12">
+              <h2>{bot_type} Control panel</h2>
+            </div> */}
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Name of Company</h5>
               <div className="mb-3">
