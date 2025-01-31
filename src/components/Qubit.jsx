@@ -19,7 +19,11 @@ function Qubit({bot_type}) {
     menuAfterGreetings: false,
     disablepersistentchathistory: false,
     greeting_message: "",
-    farewell_message: ""
+    farewell_message: "",
+    disableboticonanimation:false,
+    selectSpecificOpenAIModel:"",
+    timesattemptnoresult: "",
+    setupOpenAIAPIIntegration:false,
   });
   console.log("bot type: " , bot_type);
   useEffect(() => {
@@ -45,7 +49,11 @@ function Qubit({bot_type}) {
           menuAfterGreetings: data.data.settings.menuAfterGreetings || false,
           disablepersistentchathistory: data.data.settings.disablepersistentchathistory || false,
           greeting_message: data.data.settings.greeting_message || "",
-          farewell_message: data.data.settings.farewell_message || ""
+          farewell_message: data.data.settings.farewell_message || "",
+          disableboticonanimation: data.data.settings.disableboticonanimation || false,
+          selectSpecificOpenAIModel: data.data.settings.selectSpecificOpenAIModel||"",
+          timesattemptnoresult: data.data.settings.timesattemptnoresult || "",
+          setupOpenAIAPIIntegration: data.data.settings.setupOpenAIAPIIntegration||false,
         });
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -296,7 +304,84 @@ function Qubit({bot_type}) {
                 </label>
               </div>
             </div>
-            <div className="col-md-6 p-3"></div>
+            <div className="col-md-6 p-3">
+              <h5 className="mb-3">Disable Animations</h5>
+              <div className="form-check form-switch">
+                <input
+                  type="checkbox"
+                  id="disableboticonanimation"
+                  className="form-check-input"
+                  role="switch"
+                  checked={settings.disableboticonanimation}
+                  aria-label="Enable Floating Icon"
+                  onChange={handleChange}
+                />
+                <label htmlFor="disableboticonanimation" className="form-check-label">
+                  Disable Persistent Chat History
+                </label>
+              </div>
+            </div>
+            <div className="col-md-6 p-3">
+              <h5 className="mb-3">Setup OpenAI API Integration</h5>
+              <div className="form-check form-switch">
+                <input
+                  type="checkbox"
+                  id="setupOpenAIAPIIntegration"
+                  className="form-check-input"
+                  role="switch"
+                  checked={settings.setupOpenAIAPIIntegration}
+                  aria-label="Enable Floating Icon"
+                  onChange={handleChange}
+                />
+                <label htmlFor="setupOpenAIAPIIntegration" className="form-check-label">
+                  Disable Persistent Chat History
+                </label>
+              </div>
+            </div>
+            <div className="col-md-6 p-3">
+              <h5 className="mb-3">Configure Bot Activity Hours</h5>
+              <div className="mb-3">
+                <input
+                  type="time"
+                  id="timesattemptnoresult"
+                  className="form-control main-search"
+                  placeholder="enter name . . . "
+                  aria-label="Recipient Email"
+                  value={settings.timesattemptnoresult}
+                  onChange={handleChange}
+                />
+              </div>
+              <label htmlFor="timesattemptnoresult" className="form-label">
+                *Support and Call Back requests will be sent to this address
+              </label>
+            </div>
+            <div className="col-md-6 p-3">
+              <h5 className="mb-3">Select Specific OpenAI Model</h5>
+              <select id="selectSpecificOpenAIModel" value={settings.selectSpecificOpenAIModel} className="form-select main-search" onChange={handleChange}>
+                <option value="3.0">3.0</option>
+                <option value="3.1">3.1</option>
+                <option value="3.2">3.2</option>
+              </select>
+              <label htmlFor="selectSpecificOpenAIModel" className="form-label">
+                Delay between bot customer query and chatbot response in the conversation.
+              </label>
+            </div>
+            <div className="col-md-6 p-3">
+              <h5 className="mb-3">Predefined Intents – FAQ</h5>
+              <div className="mb-3">
+                <textarea
+                  id="predefinedIntents"
+                  className="form-control main-search"
+                  placeholder="Message here . . ."
+                  aria-label="Recipient Email"
+                  // value={settings.greeting_message}
+                  // onChange={handleChange}
+                ></textarea>
+              </div>
+              <label htmlFor="predefinedIntents" className="form-label">
+                *Write your first greeting message.
+              </label>
+            </div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Greeting Message</h5>
               <div className="mb-3">
@@ -313,7 +398,6 @@ function Qubit({bot_type}) {
                 *Write your first greeting message.
               </label>
             </div>
-
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Farewell Message</h5>
               <div className="mb-3">
@@ -327,6 +411,22 @@ function Qubit({bot_type}) {
                 ></textarea>
               </div>
               <label htmlFor="farewell_message" className="form-label">
+                *Write your Farewell message.
+              </label>
+            </div>
+            <div className="col-md-6 p-3">
+              <h5 className="mb-3">Prompt</h5>
+              <div className="mb-3">
+                <textarea
+                  id="prompt"
+                  className="form-control main-search"
+                  placeholder="Message here . . ."
+                  aria-label="Recipient Email"
+                  // value={settings.farewell_message}
+                  // onChange={handleChange}
+                ></textarea>
+              </div>
+              <label htmlFor="prompt" className="form-label">
                 *Write your Farewell message.
               </label>
             </div>
