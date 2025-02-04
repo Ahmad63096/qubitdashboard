@@ -10,13 +10,13 @@ function Dashboard() {
   return (
     <>
     <Chatanalytics/>
-      <div class="container-fluid">
-        <div class="row g-4">
-          <div class="col-sm-12 col-xl-8">
-            <div class="container-fluid">
+      <div className="container-fluid">
+        <div className="row g-4">
+          <div className="col-sm-12 col-xl-8">
+            <div className="container-fluid">
               <div className="row py-4">
                 <div className="col-12" style={{ paddingRight: "0" }}>
-                  <div class="h-100 rounded p-4">
+                  <div className="h-100 rounded p-4">
                     <Chatlog />
                   </div>
                 </div>
@@ -28,32 +28,32 @@ function Dashboard() {
               </div> */}
             </div>
           </div>
-          <div class="col-sm-12 col-xl-4 mt-5" style={{ paddingLeft: "0" }}>
+          <div className="col-sm-12 col-xl-4 mt-5" style={{ paddingLeft: "0" }}>
             <div className="container-fluid">
               <div className="row py-0">
                 <div className="col-12">
-                  <div class="text-center rounded p-4">
+                  <div className="text-center rounded p-4">
                     <Chart />
                   </div>
                 </div>
               </div>
               {/* <div className="row py-3">
                 <div className="col-12">
-                  <div class="text-center rounded p-4">
+                  <div className="text-center rounded p-4">
                     <Calender />
                   </div>
                 </div>
               </div> */}
               {/* <div className="row py-3">
                 <div className="col-12">
-                  <div class="text-center rounded p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                      <h6 class="mb-0">Today Appointments</h6>
+                  <div className="text-center rounded p-4">
+                    <div className="d-flex align-items-center justify-content-between mb-4">
+                      <h6 className="mb-0">Today Appointments</h6>
                       <a href="/">Show All</a>
                     </div>
-                    <div class="d-flex py-2">
+                    <div className="d-flex py-2">
                       <img
-                        class="rounded-circle flex-shrink-0"
+                        className="rounded-circle flex-shrink-0"
                         src={user}
                         alt=""
                       />
@@ -73,11 +73,11 @@ function Dashboard() {
                           Start Now
                         </button>
                       </div>
-                      <i class="fa-solid fa-ellipsis mt-3"></i>
+                      <i className="fa-solid fa-ellipsis mt-3"></i>
                     </div>
-                    <div class="d-flex py-2">
+                    <div className="d-flex py-2">
                       <img
-                        class="rounded-circle flex-shrink-0"
+                        className="rounded-circle flex-shrink-0"
                         src={user}
                         alt=""
                       />
@@ -92,11 +92,11 @@ function Dashboard() {
                       <div>
                         <button className="start-now-button">Start Now</button>
                       </div>
-                      <i class="fa-solid fa-ellipsis mt-3"></i>
+                      <i className="fa-solid fa-ellipsis mt-3"></i>
                     </div>
-                    <div class="d-flex py-2">
+                    <div className="d-flex py-2">
                       <img
-                        class="rounded-circle flex-shrink-0"
+                        className="rounded-circle flex-shrink-0"
                         src={user}
                         alt=""
                       />
@@ -116,11 +116,11 @@ function Dashboard() {
                           Start Now
                         </button>
                       </div>
-                      <i class="fa-solid fa-ellipsis mt-3"></i>
+                      <i className="fa-solid fa-ellipsis mt-3"></i>
                     </div>
-                    <div class="d-flex py-2">
+                    <div className="d-flex py-2">
                       <img
-                        class="rounded-circle flex-shrink-0"
+                        className="rounded-circle flex-shrink-0"
                         src={user}
                         alt=""
                       />
@@ -140,11 +140,11 @@ function Dashboard() {
                           Start Now
                         </button>
                       </div>
-                      <i class="fa-solid fa-ellipsis mt-3"></i>
+                      <i className="fa-solid fa-ellipsis mt-3"></i>
                     </div>
-                    <div class="d-flex py-2">
+                    <div className="d-flex py-2">
                       <img
-                        class="rounded-circle flex-shrink-0"
+                        className="rounded-circle flex-shrink-0"
                         src={user}
                         alt=""
                       />
@@ -164,11 +164,11 @@ function Dashboard() {
                           Start Now
                         </button>
                       </div>
-                      <i class="fa-solid fa-ellipsis mt-3"></i>
+                      <i className="fa-solid fa-ellipsis mt-3"></i>
                     </div>
-                    <div class="d-flex py-2">
+                    <div className="d-flex py-2">
                       <img
-                        class="rounded-circle flex-shrink-0"
+                        className="rounded-circle flex-shrink-0"
                         src={user}
                         alt=""
                       />
@@ -188,7 +188,7 @@ function Dashboard() {
                           Start Now
                         </button>
                       </div>
-                      <i class="fa-solid fa-ellipsis mt-3"></i>
+                      <i className="fa-solid fa-ellipsis mt-3"></i>
                     </div>
                   </div>
                 </div>

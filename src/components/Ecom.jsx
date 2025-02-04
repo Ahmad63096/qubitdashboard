@@ -138,7 +138,7 @@ const [successMessage, setSuccessMessage] = useState("");
                 // value={formData.fromEmail}
                 // onChange={handleChange}
                 />
-                <button type="button" class="input-group-text eyebutton" onClick={() => setShow(!show)} style={{ cursor: 'pointer' }}><i class={show ? "fas fa-eye" : "fas fa-eye-slash"}></i></button>
+                <button type="button" className="input-group-text eyebutton" onClick={() => setShow(!show)} style={{ cursor: 'pointer' }}><i className={show ? "fas fa-eye" : "fas fa-eye-slash"}></i></button>
               </div>
               <label htmlFor="smtppassword" className="form-label">
                 SMTP Password

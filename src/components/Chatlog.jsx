@@ -119,11 +119,7 @@ function Chatlog() {
                 <div className="d-flex w-100 justify-content-between">
                   <h6 className="mb-0">{chat.client_name || "Unknown Client"}</h6>
                   <div className="d-flex justify-content-between">
-                    <span className="icons-margin">{formatTimeAgo(chat.last_updated)}</span>
-                    {/* <span className="icons-margin position-relative">
-                      <i className="fa-solid fa-message"></i>
-                      <span className="dot">&#8226;</span>
-                    </span> */}
+                    <span className="icons-margin">{formatTimeAgo(chat.date_created)}</span>
                     <span className="icons-margin">
                       <i
                         className="fa-solid fa-ellipsis ellipsis-pointer"
@@ -158,7 +154,7 @@ function Chatlog() {
               </div>
             </div>
             <div className="d-flex justify-content-between mt-2 border-bottom pb-3">
-              <div className="col-1">{new Date(chat.last_updated).toLocaleDateString()}</div>
+              <div className="col-1">{new Date(chat.date_created).toLocaleDateString()}</div>
               <div className="col-9 d-flex align-items-end flex-column mt-3">
                 <span>QUBIT</span>
                 <p

@@ -39,7 +39,7 @@ function Chart() {
         const token = localStorage.getItem('authToken'); // Retrieve the token from localStorage or another secure storage method
 
         const response = await fetch(
-          'https://bot.devspandas.com/api/analytics/last-6-months-chats?include=chat_count',
+          'https://bot.devspandas.com/api/chat/last-6-months-chats?include=chat_count',
           {
             method: 'GET',
             headers: {

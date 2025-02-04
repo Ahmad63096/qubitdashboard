@@ -32,27 +32,12 @@ function Dashboardcard({ number, icon, line, heading, value, comment, onClick })
 function Chatanalytics() {
   const [modalData, setModalData] = useState(null);
   const [apiData, setApiData] = useState(null);
-  // useEffect(() => {
-  //   const fetchAnalyticsData = async () => {
-  //     try {
-  //       const response = await fetch(process.env.REACT_APP_API_CHAT_ANALYSIS);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //       const data = await response.json();
-  //       console.log('Analysis API Response:', data);
-  //       setApiData(data);
-  //     } catch (error) {
-  //       console.error('Error fetching analytics data:', error);
-  //     }
-  //   };
-  //   fetchAnalyticsData();
-  // }, []);
   useEffect(() => {
+    // debugger;
     const fetchAnalyticsData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(process.env.REACT_APP_API_CHAT_ANALYSIS, {
+        const response = await fetch('https://bot.devspandas.com/api/chat/chat-analysis', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

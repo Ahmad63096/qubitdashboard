@@ -30,7 +30,7 @@ function Analytics() {
       try {
         const token = localStorage.getItem('authToken'); // Replace with your actual token
         const response = await fetch(
-          'https://bot.devspandas.com/api/analytics/last-6-months-chats?include=chat_count',
+          'https://bot.devspandas.com/api/chat/last-6-months-chats?include=chat_count',
           {
             method: 'GET',
             headers: {
@@ -40,6 +40,7 @@ function Analytics() {
           }
         );
         const result = await response.json();
+        console.log('analytics result is:',result);
         const rawData = result.chat_counts || {};
         const months = Object.keys(rawData).map((key) => {
           return key.split(' ')[1].slice(0, 3); 
