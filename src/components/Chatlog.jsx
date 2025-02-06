@@ -119,7 +119,7 @@ function Chatlog() {
                 <div className="d-flex w-100 justify-content-between">
                   <h6 className="mb-0">{chat.client_name || "Unknown Client"}</h6>
                   <div className="d-flex justify-content-between">
-                    <span className="icons-margin">{formatTimeAgo(chat.date_created)}</span>
+                    <span className="icons-margin">{formatTimeAgo(chat.last_updated)}</span>
                     <span className="icons-margin">
                       <i
                         className="fa-solid fa-ellipsis ellipsis-pointer"

@@ -31,6 +31,7 @@ function Logs() {
         return response.json();
       })
       .then((data) => {
+        console.log("this is all chat:",data);
         const reversedChats = data.chats.reverse();
         setMessages(reversedChats);
         setFilteredMessages(reversedChats);
@@ -179,7 +180,7 @@ function Logs() {
                         <h6 className="mb-0" style={{ textTransform: 'capitalize' }}>
                           {msg.client_name || 'Unknown Person'}
                         </h6>
-                        <small>{formatTimeAgo(msg.date_created)}</small>
+                        <small>{formatTimeAgo(msg.last_updated)}</small>
                       </div>
                       <p className="first-message">{msg.messages[0]?.client_message}</p>
                     </div>
