@@ -32,7 +32,7 @@ function Logs() {
       })
       .then((data) => {
         console.log("this is all chat:",data);
-        const reversedChats = data.chats.reverse();
+        const reversedChats = data.chats;
         setMessages(reversedChats);
         setFilteredMessages(reversedChats);
         setLoading(false);

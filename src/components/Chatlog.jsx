@@ -154,7 +154,7 @@ function Chatlog() {
               </div>
             </div>
             <div className="d-flex justify-content-between mt-2 border-bottom pb-3">
-              <div className="col-1">{new Date(chat.date_created).toLocaleDateString()}</div>
+              <div className="col-1">{new Date(chat.last_updated).toLocaleDateString()}</div>
               <div className="col-9 d-flex align-items-end flex-column mt-3">
                 <span>QUBIT</span>
                 <p
