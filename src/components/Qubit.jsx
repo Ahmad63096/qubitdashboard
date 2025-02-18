@@ -23,7 +23,9 @@ function Qubit({bot_type}) {
     disableboticonanimation:false,
     selectSpecificOpenAIModel:"",
     timesattemptnoresult: "",
-    setupOpenAIAPIIntegration:false,
+    setupOpenAIAPIIntegration:'',
+    predefined_intents:"",
+    prompts: "",
   });
   console.log("bot type: " , bot_type);
   useEffect(() => {
@@ -53,7 +55,9 @@ function Qubit({bot_type}) {
           disableboticonanimation: data.data.settings.disableboticonanimation || false,
           selectSpecificOpenAIModel: data.data.settings.selectSpecificOpenAIModel||"",
           timesattemptnoresult: data.data.settings.timesattemptnoresult || "",
-          setupOpenAIAPIIntegration: data.data.settings.setupOpenAIAPIIntegration||false,
+          setupOpenAIAPIIntegration: data.data.settings.setupOpenAIAPIIntegration||'',
+          predefined_intents: data.data.settings.predefined_intents||"",
+          prompts: data.data.settings.prompts||"",
         });
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -84,6 +88,7 @@ function Qubit({bot_type}) {
         },
         body: JSON.stringify(settings),
       });
+      // console.log('ghfghfgfhgh',JSON.stringify(response));
       if (!response.ok) {
         throw new Error("Failed to save settings");
       }
@@ -323,13 +328,12 @@ function Qubit({bot_type}) {
             </div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Setup OpenAI API Integration</h5>
-              <div className="form-check form-switch">
+              <div className="form-check ">
                 <input
-                  type="checkbox"
+                  type="text"
                   id="setupOpenAIAPIIntegration"
-                  className="form-check-input"
-                  role="switch"
-                  checked={settings.setupOpenAIAPIIntegration}
+                  className="form-control main-search"
+                  value={settings.setupOpenAIAPIIntegration}
                   aria-label="Enable Floating Icon"
                   onChange={handleChange}
                 />
@@ -370,15 +374,15 @@ function Qubit({bot_type}) {
               <h5 className="mb-3">Predefined Intents – FAQ</h5>
               <div className="mb-3">
                 <textarea
-                  id="predefinedIntents"
+                  id="predefined_intents"
                   className="form-control main-search"
                   placeholder="Message here . . ."
                   aria-label="Recipient Email"
-                  // value={settings.greeting_message}
-                  // onChange={handleChange}
+                  value={settings.predefined_intents}
+                  onChange={handleChange}
                 ></textarea>
               </div>
-              <label htmlFor="predefinedIntents" className="form-label">
+              <label htmlFor="predefined_intents" className="form-label">
                 *Write your first greeting message.
               </label>
             </div>
@@ -415,18 +419,18 @@ function Qubit({bot_type}) {
               </label>
             </div>
             <div className="col-md-6 p-3">
-              <h5 className="mb-3">Prompt</h5>
+              <h5 className="mb-3">prompts</h5>
               <div className="mb-3">
                 <textarea
-                  id="prompt"
+                  id="prompts"
                   className="form-control main-search"
                   placeholder="Message here . . ."
                   aria-label="Recipient Email"
-                  // value={settings.farewell_message}
-                  // onChange={handleChange}
+                  value={settings.prompts}
+                  onChange={handleChange}
                 ></textarea>
               </div>
-              <label htmlFor="prompt" className="form-label">
+              <label htmlFor="prompts" className="form-label">
                 *Write your Farewell message.
               </label>
             </div>
