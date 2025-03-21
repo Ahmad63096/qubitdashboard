@@ -110,7 +110,7 @@ function Chatanalytics() {
                   icon={icon3}
                   line={line3}
                   heading="Peak Times"
-                  value={`${apiData.peak_times[0].hour} - ${apiData.peak_times[0].count} users`}
+                  // value={`${apiData.peak_times[0].hour} - ${apiData.peak_times[0].count} users`}
                   comment={`Data for ${apiData.peak_times.length} peak hours`}
                 />
               </div>

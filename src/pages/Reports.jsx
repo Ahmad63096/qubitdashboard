@@ -126,7 +126,7 @@ function Reports() {
                 </div>
               </div>
 
-              <button type="submit" className="btn btn-primary w-100 mt-3 submit-button">
+              <button type="submit" className="btn btn-primary w-100 mt-3 submit-button" disabled>
                 Submit
               </button>
             </form>
