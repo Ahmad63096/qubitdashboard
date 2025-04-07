@@ -80,7 +80,8 @@ function Chatanalytics() {
                   icon={icon1}
                   line={line1}
                   heading="Total Chats"
-                  value={apiData.total_chats}
+                  // value={apiData.total_chats}
+                  value="52"
                   comment={`${apiData.total_chats_percentage_change} change`}
                   onClick={() => handleCardClick({
                     heading: "Total Chats",
@@ -95,7 +96,8 @@ function Chatanalytics() {
                   icon={icon2}
                   line={line2}
                   heading="Unique Users"
-                  value={apiData.unique_users}
+                  value="21"
+                  // value={apiData.unique_users}
                   comment={`${apiData.unique_users_percentage_change} change`}
                   onClick={() => handleCardClick({
                     heading: "Unique Users",
@@ -110,6 +112,7 @@ function Chatanalytics() {
                   icon={icon3}
                   line={line3}
                   heading="Peak Times"
+                  value="10am to 6pm"
                   // value={`${apiData.peak_times[0].hour} - ${apiData.peak_times[0].count} users`}
                   comment={`Data for ${apiData.peak_times.length} peak hours`}
                 />

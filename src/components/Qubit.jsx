@@ -330,10 +330,11 @@ function Qubit({bot_type}) {
               <h5 className="mb-3">Setup OpenAI API Integration</h5>
               <div className="form-check ">
                 <input
-                  type="text"
+                  type="password"
                   id="setupOpenAIAPIIntegration"
                   className="form-control main-search"
-                  value={settings.setupOpenAIAPIIntegration}
+                  value="62eF0LAl5utunWDZyxH0woXkT3BlbkFJyzBO1YPRqQynDZyxH0woXkT3BlbkFJyzBJO1YPRqQyn"
+                  // value={settings.setupOpenAIAPIIntegration}
                   aria-label="Enable Floating Icon"
                   onChange={handleChange}
                 />
@@ -343,6 +344,23 @@ function Qubit({bot_type}) {
               </div>
             </div>
             <div className="col-md-6 p-3">
+              <h5 className="mb-3">Setup Deepseek API Integration</h5>
+              <div className="form-check ">
+                <input
+                  type="password"
+                  id="setupDeepseekAPIIntegration"
+                  className="form-control main-search"
+                  value="62eF0LAl5utunWDZyxH0woXkT3BlbkFJyzBO1YPRqQynDZyxH0woXkT3BlbkFJyzBJO1YPRqQyn"
+                  // value={settings.setupOpenAIAPIIntegration}
+                  aria-label="Enable Floating Icon"
+                  onChange={handleChange}
+                />
+                <label htmlFor="setupDeepseekAPIIntegration" className="form-check-label">
+                  Disable Persistent Chat History
+                </label>
+              </div>
+            </div>
+            {/* <div className="col-md-6 p-3">
               <h5 className="mb-3">Configure Bot Activity Hours</h5>
               <div className="mb-3">
                 <input
@@ -358,15 +376,25 @@ function Qubit({bot_type}) {
               <label htmlFor="timesattemptnoresult" className="form-label">
                 *Support and Call Back requests will be sent to this address
               </label>
-            </div>
+            </div> */}
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Select Specific OpenAI Model</h5>
               <select id="selectSpecificOpenAIModel" value={settings.selectSpecificOpenAIModel} className="form-select main-search" onChange={handleChange}>
-                <option value="3.0">3.0</option>
-                <option value="3.1">3.1</option>
-                <option value="3.2">3.2</option>
+                <option value="3.0">GPT 4o</option>
+                <option value="3.1">GPT 4o-mini</option>
+                <option value="3.2">GPT 3.5-Turbo</option>
               </select>
               <label htmlFor="selectSpecificOpenAIModel" className="form-label">
+                Delay between bot customer query and chatbot response in the conversation.
+              </label>
+            </div>
+            <div className="col-md-6 p-3">
+              <h5 className="mb-3">Select Specific Deepseek Model</h5>
+              <select id="selectSpecificDeepseekModel" value={settings.selectSpecificDeepseekModel} className="form-select main-search" onChange={handleChange}>
+                <option value="3.0">R1</option>
+                <option value="3.1">V3</option>
+              </select>
+              <label htmlFor="selectSpecificDeepseekModel" className="form-label">
                 Delay between bot customer query and chatbot response in the conversation.
               </label>
             </div>
