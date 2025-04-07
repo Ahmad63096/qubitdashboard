@@ -122,7 +122,8 @@ function Qubit({bot_type}) {
                   className="form-control main-search"
                   placeholder="enter name . . . "
                   aria-label="Recipient Email"
-                  value={settings.company_name}
+                  value="Devpandas"
+                  // value={settings.company_name}
                   onChange={handleChange}
                 />
               </div>
@@ -139,7 +140,8 @@ function Qubit({bot_type}) {
                   className="form-control main-search"
                   placeholder="wordpress@localhost"
                   aria-label="From Email Address"
-                  value={settings.fromEmail}
+                  value="dev@chatpands.com"
+                  // value={settings.fromEmail}
                   onChange={handleChange}
                 />
               </div>
@@ -174,7 +176,8 @@ function Qubit({bot_type}) {
                   className="form-control main-search"
                   placeholder="Wordpress"
                   aria-label="From Name"
-                  value={settings.fromName}
+                  value="admin"
+                  // value={settings.fromName}
                   onChange={handleChange}
                 />
               </div>
