@@ -328,7 +328,7 @@ function Qubit({bot_type}) {
             </div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Setup OpenAI API Integration</h5>
-              <div className="form-check ">
+              <div className="form-check p-0">
                 <input
                   type="password"
                   id="setupOpenAIAPIIntegration"
@@ -345,7 +345,7 @@ function Qubit({bot_type}) {
             </div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Setup Deepseek API Integration</h5>
-              <div className="form-check ">
+              <div className="form-check p-0">
                 <input
                   type="password"
                   id="setupDeepseekAPIIntegration"
