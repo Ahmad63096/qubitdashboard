@@ -1,65 +1,93 @@
-import React, { useState } from "react";
-import { appointments as initialAppointments } from "../components/Functions";
-
+import React, { useState, useEffect } from "react";
+import { convertTo12HourFormat } from "../components/Functions";
+import EditAppointmentModal from "../components/EditAppointmentModal";
 function Appointment() {
   const [viewModal, setViewModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
-  const [appointments, setAppointments] = useState(initialAppointments);
-  const [sortDateAsc, setSortDateAsc] = useState(true); // For sorting date ascending
-  const [sortTimeAsc, setSortTimeAsc] = useState(true); // For sorting time ascending
-
+  const [appointments, setAppointments] = useState([]);
+  const [sortDateAsc, setSortDateAsc] = useState(true);
+  const [sortTimeAsc, setSortTimeAsc] = useState(true);
+  const fetchAppointments = async () => {
+    try {
+      const response = await fetch("https://bot.devspandas.com/api/appointment/get_appointments");
+      if (!response.ok) throw new Error("Failed to fetch data");
+      const data = await response.json();
+      const fetchedAppointments = data.appointments.map((item, index) => ({
+        id: item.id, 
+        name: item.client_name,
+        date: item.preferred_date,
+        time: item.preferred_time,
+        email: item.client_email,
+        necessity: item.service,
+        status: item.demo_status.charAt(0).toUpperCase() + item.demo_status.slice(1),
+      }));
+      setAppointments(fetchedAppointments);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
   const handleView = (data) => {
     setSelectedData(data);
     setViewModal(true);
   };
-
   const handleEdit = (data) => {
     setSelectedData(data);
     setEditModal(true);
   };
-
   const handleClose = () => {
     setViewModal(false);
     setEditModal(false);
     setSelectedData(null);
   };
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this appointment?");
+    if (!confirmDelete) return;
 
+    try {
+      const response = await fetch(`https://bot.devspandas.com/api/appointment/delete_appointment?id=${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete appointment");
+      }
+      await fetchAppointments();
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+      alert("Failed to delete appointment.");
+    }
+  };
   const getStatusClass = (status) => {
-    switch (status) {
-      case "Success":
+    switch (status.toLowerCase()) {
+      case "success":
         return "btn btn-outline-success";
-      case "Pending":
+      case "pending":
         return "btn btn-outline-warning";
-      case "Cancel":
+      case "cancel":
         return "btn btn-outline-danger";
-      case "Waiting":
+      case "waiting":
         return "btn btn-outline-info";
       default:
         return "btn btn-outline-secondary";
     }
   };
-
   const handleSortByDate = () => {
-    const sortedAppointments = [...appointments].sort((a, b) => {
-      return sortDateAsc
-        ? new Date(a.date) - new Date(b.date) // Ascending order
-        : new Date(b.date) - new Date(a.date); // Descending order
-    });
+    const sortedAppointments = [...appointments].sort((a, b) =>
+      sortDateAsc ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date)
+    );
     setAppointments(sortedAppointments);
-    setSortDateAsc(!sortDateAsc); // Toggle sort direction
+    setSortDateAsc(!sortDateAsc);
   };
-
   const handleSortByTime = () => {
-    const sortedAppointments = [...appointments].sort((a, b) => {
-      return sortTimeAsc
-        ? a.time.localeCompare(b.time) // Ascending order
-        : b.time.localeCompare(a.time); // Descending order
-    });
+    const sortedAppointments = [...appointments].sort((a, b) =>
+      sortTimeAsc ? a.time.localeCompare(b.time) : b.time.localeCompare(a.time)
+    );
     setAppointments(sortedAppointments);
-    setSortTimeAsc(!sortTimeAsc); // Toggle sort direction
+    setSortTimeAsc(!sortTimeAsc);
   };
-
   return (
     <>
       <div className="container-fluid pt-4 px-4">
@@ -69,41 +97,33 @@ function Appointment() {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>
                     Date
                     <button onClick={handleSortByDate} style={{ fontSize: "16px" }}>
-                      {sortDateAsc ? (
-                        <i className="fa-solid fa-arrow-up"></i>
-                      ) : (
-                        <i className="fa-solid fa-arrow-down"></i>
-                      )}
+                      {sortDateAsc ? <i className="fa-solid fa-arrow-up" /> : <i className="fa-solid fa-arrow-down" />}
                     </button>
                   </th>
-                  <th scope="col">
+                  <th>
                     Time
                     <button onClick={handleSortByTime} style={{ fontSize: "16px" }}>
-                      {sortTimeAsc ? (
-                        <i className="fa-solid fa-arrow-up"></i>
-                      ) : (
-                        <i className="fa-solid fa-arrow-down"></i>
-                      )}
+                      {sortTimeAsc ? <i className="fa-solid fa-arrow-up" /> : <i className="fa-solid fa-arrow-down" />}
                     </button>
                   </th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Necessity</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Action</th>
+                  <th>Email</th>
+                  <th>Necessity</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {appointments.map((appointment) => (
+                {appointments.map((appointment, index) => (
                   <tr key={appointment.id}>
-                    <th scope="row">{appointment.id}</th>
+                    <th scope="row">{index + 1}</th>
                     <td>{appointment.name}</td>
                     <td>{appointment.date}</td>
-                    <td>{appointment.time}</td>
+                    <td>{convertTo12HourFormat(appointment.time)}</td>
                     <td>{appointment.email}</td>
                     <td>{appointment.necessity}</td>
                     <td>
@@ -116,19 +136,16 @@ function Appointment() {
                       </button>
                     </td>
                     <td>
-                      <button
-                        style={{ fontSize: "14px" }}
-                        onClick={() => handleView(appointment)}
-                      >
+                      <button style={{ fontSize: "14px" }} onClick={() => handleView(appointment)}>
                         <i className="fa-solid fa-eye"></i>
                       </button>
-                      <button
-                        style={{ fontSize: "14px" }}
-                        onClick={() => handleEdit(appointment)}
-                      >
+                      <button style={{ fontSize: "14px" }} onClick={() => handleEdit(appointment)}>
                         <i className="fa-solid fa-pen-to-square"></i>
                       </button>
-                      <button style={{ fontSize: "14px" }}>
+                      <button
+                        style={{ fontSize: "14px" }}
+                        onClick={() => handleDelete(appointment.id)}
+                      >
                         <i className="fa-solid fa-trash"></i>
                       </button>
                     </td>
@@ -139,19 +156,14 @@ function Appointment() {
           </div>
         </div>
       </div>
-
       {/* View Modal */}
-      {viewModal && (
+      {viewModal && selectedData && (
         <div className="modal show d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Appointment Details</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleClose}
-                ></button>
+                <button type="button" className="btn-close" onClick={handleClose}></button>
               </div>
               <div className="modal-body">
                 <p><strong>Name:</strong> {selectedData.name}</p>
@@ -162,11 +174,7 @@ function Appointment() {
                 <p><strong>Status:</strong> {selectedData.status}</p>
               </div>
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handleClose}
-                >
+                <button type="button" className="btn btn-secondary" onClick={handleClose}>
                   Close
                 </button>
               </div>
@@ -174,330 +182,16 @@ function Appointment() {
           </div>
         </div>
       )}
-
-      {/* Edit Modal */}
-      {editModal && (
-        <div className="modal show d-block" tabIndex="-1">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Appointment</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleClose}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <div className="mb-3">
-                    <label className="form-label">Name</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      defaultValue={selectedData.name}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Date</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      defaultValue={selectedData.date}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Time</label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      defaultValue={selectedData.time}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      defaultValue={selectedData.email}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Necessity</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      defaultValue={selectedData.necessity}
-                    />
-                  </div>
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handleClose}
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save Changes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {editModal && selectedData && (
+        <EditAppointmentModal
+          appointment={selectedData}
+          onClose={handleClose}
+          onSave={() => {
+            fetchAppointments();
+          }}
+        />
       )}
     </>
   );
 }
-
 export default Appointment;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState } from "react";
-// import { appointments } from "../components/Functions";
-// function Appointment() {
-//   const [viewModal, setViewModal] = useState(false);
-//   const [editModal, setEditModal] = useState(false);
-//   const [selectedData, setSelectedData] = useState(null);
-//   const handleView = (data) => {
-//     setSelectedData(data);
-//     setViewModal(true);
-//   };
-//   const handleEdit = (data) => {
-//     setSelectedData(data);
-//     setEditModal(true);
-//   };
-//   const handleClose = () => {
-//     setViewModal(false);
-//     setEditModal(false);
-//     setSelectedData(null);
-//   };
-//   const getStatusClass = (status) => {
-//     switch (status) {
-//       case "Success":
-//         return "btn btn-outline-success";
-//       case "Pending":
-//         return "btn btn-outline-warning";
-//       case "Cancel":
-//         return "btn btn-outline-danger";
-//       case "Waiting":
-//         return "btn btn-outline-info";
-//       default:
-//         return "btn btn-outline-secondary";
-//     }
-//   };
-//   return (
-//     <>
-//       <div className="container-fluid pt-4 px-4">
-//         <div className="rounded h-100 p-4">
-//           <h6 className="mb-4">Responsive Table</h6>
-//           <div className="table-responsive">
-//             <table className="table">
-//               <thead>
-//                 <tr>
-//                   <th scope="col">#</th>
-//                   <th scope="col">Name</th>
-//                   <th scope="col">Date</th>
-//                   <th scope="col">Time</th>
-//                   <th scope="col">Email</th>
-//                   <th scope="col">Necessity</th>
-//                   <th scope="col">Status</th>
-//                   <th scope="col">Action</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {appointments.map((appointment) => (
-//                   <tr key={appointment.id}>
-//                     <th scope="row">{appointment.id}</th>
-//                     <td>{appointment.name}</td>
-//                     <td>{appointment.date}</td>
-//                     <td>{appointment.time}</td>
-//                     <td>{appointment.email}</td>
-//                     <td>{appointment.necessity}</td>
-//                     <td>
-//                       <button
-//                         type="button"
-//                         className={getStatusClass(appointment.status)}
-//                         style={{ padding: "0px 10px" }}
-//                       >
-//                         {appointment.status}
-//                       </button>
-//                     </td>
-//                     <td>
-//                       <button
-//                         style={{ fontSize: "14px" }}
-//                         onClick={() => handleView(appointment)}
-//                       >
-//                         <i className="fa-solid fa-eye"></i>
-//                       </button>
-//                       <button
-//                         style={{ fontSize: "14px" }}
-//                         onClick={() => handleEdit(appointment)}
-//                       >
-//                         <i className="fa-solid fa-pen-to-square"></i>
-//                       </button>
-//                       <button style={{ fontSize: "14px" }}>
-//                         <i className="fa-solid fa-trash"></i>
-//                       </button>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-//       </div>
-//       {viewModal && (
-//         <div className="modal show d-block" tabIndex="-1">
-//           <div className="modal-dialog">
-//             <div className="modal-content">
-//               <div className="modal-header">
-//                 <h5 className="modal-title">Appointment Details</h5>
-//                 <button
-//                   type="button"
-//                   className="btn-close"
-//                   onClick={handleClose}
-//                 ></button>
-//               </div>
-//               <div className="modal-body">
-//                 <p><strong>Name:</strong> {selectedData.name}</p>
-//                 <p><strong>Date:</strong> {selectedData.date}</p>
-//                 <p><strong>Time:</strong> {selectedData.time}</p>
-//                 <p><strong>Email:</strong> {selectedData.email}</p>
-//                 <p><strong>Necessity:</strong> {selectedData.necessity}</p>
-//                 <p><strong>Status:</strong> {selectedData.status}</p>
-//               </div>
-//               <div className="modal-footer">
-//                 <button
-//                   type="button"
-//                   className="btn btn-secondary"
-//                   onClick={handleClose}
-//                 >
-//                   Close
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//       {editModal && (
-//         <div className="modal show d-block" tabIndex="-1">
-//           <div className="modal-dialog">
-//             <div className="modal-content">
-//               <div className="modal-header">
-//                 <h5 className="modal-title">Edit Appointment</h5>
-//                 <button
-//                   type="button"
-//                   className="btn-close"
-//                   onClick={handleClose}
-//                 ></button>
-//               </div>
-//               <div className="modal-body">
-//                 <form>
-//                   <div className="mb-3">
-//                     <label className="form-label">Name</label>
-//                     <input
-//                       type="text"
-//                       className="form-control"
-//                       defaultValue={selectedData.name}
-//                     />
-//                   </div>
-//                   <div className="mb-3">
-//                     <label className="form-label">Date</label>
-//                     <input
-//                       type="date"
-//                       className="form-control"
-//                       defaultValue={selectedData.date}
-//                     />
-//                   </div>
-//                   <div className="mb-3">
-//                     <label className="form-label">Time</label>
-//                     <input
-//                       type="time"
-//                       className="form-control"
-//                       defaultValue={selectedData.time}
-//                     />
-//                   </div>
-//                   <div className="mb-3">
-//                     <label className="form-label">Email</label>
-//                     <input
-//                       type="email"
-//                       className="form-control"
-//                       defaultValue={selectedData.email}
-//                     />
-//                   </div>
-//                   <div className="mb-3">
-//                     <label className="form-label">Necessity</label>
-//                     <input
-//                       type="text"
-//                       className="form-control"
-//                       defaultValue={selectedData.necessity}
-//                     />
-//                   </div>
-//                 </form>
-//               </div>
-//               <div className="modal-footer">
-//                 <button
-//                   type="button"
-//                   className="btn btn-secondary"
-//                   onClick={handleClose}
-//                 >
-//                   Close
-//                 </button>
-//                 <button type="button" className="btn btn-primary">
-//                   Save Changes
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// }
-// export default Appointment;

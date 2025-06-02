@@ -20,13 +20,13 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
           <i className="fa fa-user-edit"></i>
         </h2>
       </Link>
-      <form className="d-none d-md-flex ms-4">
+      {/* <form className="d-none d-md-flex ms-4">
         <input
           className="form-control main-search "
           type="search"
           placeholder="Search"
         />
-      </form>
+      </form> */}
       <div className="navbar-nav align-items-center ms-auto">
         <div className="nav-item dropdown">
           <Notification/>

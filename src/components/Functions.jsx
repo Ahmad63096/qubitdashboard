@@ -1,32 +1,29 @@
-const handleDownload = (objectId, fileType) => {
-  const token = localStorage.getItem("authToken");
-  const apiUrl = `https://bot.devspandas.com/api/get/export-file/?file_type=${fileType}&object_id=${objectId}`;
-
-  fetch(apiUrl, {
-    method: "GET",
+// components/Functions.js
+const handleDownload = (chatId, fileType, client_name) => {
+  const token = localStorage.getItem('authToken');
+  const url = `https://bot.devspandas.com/api/export/export-file/?file_type=${fileType}&object_id=${chatId}`;
+  console.log('type or id', chatId, fileType);
+  fetch(url, {
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to fetch the file");
-      }
-      return response.blob(); // Parse the response as a blob
+    .then((res) => {
+      if (!res.ok) throw new Error('Download failed');
+      return res.blob();
     })
     .then((blob) => {
-      console.log(`${fileType.toUpperCase()} File Blob:`, blob);
-      // Optionally, download the file
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${objectId}.${fileType}`;
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `${client_name || 'unknown'}-chat.${fileType}`;
+      document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
+      a.remove();
     })
-    .catch((error) => {
-      console.error("Error downloading file:", error);
+    .catch((err) => {
+      console.error('Download error:', err);
+      alert('Failed to download the file');
     });
 };
 const appointments = [
@@ -51,5 +48,17 @@ const appointments = [
   { id: 19, name: "Cynthia", date: "28 August 2024", time: "05:17 PM", email: "jeremy89@rocha.com", necessity: "Ecommerce", status: "Pending" },
   { id: 20, name: "Edwin", date: "20 December 2024", time: "10:50 PM", email: "rblackburn@stone-hill.net", necessity: "Ecommerce", status: "Waiting" }
 ];
+function convertTo12HourFormat(time24) {
+  const [hourStr, minuteStr] = time24.split(":");
+  let hour = parseInt(hourStr, 10);
+  const minute = minuteStr;
+  const ampm = hour >= 12 ? "PM" : "AM";
+
+  hour = hour % 12;
+  hour = hour ? hour : 12; // the hour '0' should be '12'
+
+  return `${hour}:${minute} ${ampm}`;
+}
+
 export default handleDownload
-export {appointments}
+export { appointments,convertTo12HourFormat }

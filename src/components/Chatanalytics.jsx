@@ -31,38 +31,52 @@ function Dashboardcard({ number, icon, line, heading, value, comment, onClick })
 }
 function Chatanalytics() {
   const [modalData, setModalData] = useState(null);
-  const [apiData, setApiData] = useState(null);
+  const [totalChatsData, setTotalChatsData] = useState(null);
+  const [uniqueUsersData, setUniqueUsersData] = useState(null);
+  const [peakTimesData, setPeakTimesData] = useState(null);
+
   useEffect(() => {
-    // debugger;
-    const fetchAnalyticsData = async () => {
+    const token = localStorage.getItem('authToken');
+    const fetchMetric = async (metric) => {
       try {
-        const token = localStorage.getItem('authToken');
-        const response = await fetch('https://bot.devspandas.com/api/chat/chat-analysis', {
+        const response = await fetch(`https://bot.devspandas.com/api/chat/chat_analysis?include=${metric}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('Analysis API Response:', data);
-        setApiData(data);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.json();
       } catch (error) {
-        console.error('Error fetching analytics data:', error);
+        console.error(`Error fetching ${metric} data:`, error);
+        return null;
       }
     };
-    fetchAnalyticsData();
+
+    const fetchAllData = async () => {
+      const [totalChats, uniqueUsers, peakTimes] = await Promise.all([
+        fetchMetric('chat_count'),
+        fetchMetric('unique_users'),
+        fetchMetric('peak_times'),
+      ]);
+      setTotalChatsData(totalChats);
+      setUniqueUsersData(uniqueUsers);
+      setPeakTimesData(peakTimes);
+    };
+
+    fetchAllData();
   }, []);
+
   const handleCardClick = (data) => {
     setModalData(data);
     console.log('graph data', data);
   };
+
   const closeModal = () => {
     setModalData(null);
   };
+
   return (
     <>
       <div className="container-fluid pt-4 px-4">
@@ -72,55 +86,66 @@ function Chatanalytics() {
           </div>
         </div>
         <div className="row g-4">
-          {apiData && (
-            <>
-              <div className="col-12 col-md-6 col-xl-4">
-                <Dashboardcard
-                  number="one"
-                  icon={icon1}
-                  line={line1}
-                  heading="Total Chats"
-                  // value={apiData.total_chats}
-                  value="52"
-                  comment={`${apiData.total_chats_percentage_change} change`}
-                  onClick={() => handleCardClick({
+          {totalChatsData && (
+            <div className="col-12 col-md-6 col-xl-4">
+              <Dashboardcard
+                number="one"
+                icon={icon1}
+                line={line1}
+                heading="Total Chats"
+                value={totalChatsData.total_chats}
+                comment={`${totalChatsData.total_chats_percentage_change} change`}
+                onClick={() =>
+                  handleCardClick({
                     heading: "Total Chats",
-                    value: apiData.total_chats,
-                    comment: `${apiData.total_chats_percentage_change} change`,
-                  })}
-                />
-              </div>
-              <div className="col-12 col-md-6 col-xl-4">
-                <Dashboardcard
-                  number="two"
-                  icon={icon2}
-                  line={line2}
-                  heading="Unique Users"
-                  value="21"
-                  // value={apiData.unique_users}
-                  comment={`${apiData.unique_users_percentage_change} change`}
-                  onClick={() => handleCardClick({
+                    value: totalChatsData,
+                    param: "chat_count",
+                  })
+                }
+              />
+            </div>
+          )}
+          {uniqueUsersData && (
+            <div className="col-12 col-md-6 col-xl-4">
+              <Dashboardcard
+                number="two"
+                icon={icon2}
+                line={line2}
+                heading="Unique Users"
+                value={uniqueUsersData.unique_users}
+                comment={`${uniqueUsersData.unique_users_percentage_change} change`}
+                onClick={() =>
+                  handleCardClick({
                     heading: "Unique Users",
-                    value: apiData.unique_users,
-                    comment: `${apiData.unique_users_percentage_change} change`,
-                  })}
-                />
-              </div>
-              <div className="col-12 col-md-6 col-xl-4">
-                <Dashboardcard
-                  number="three"
-                  icon={icon3}
-                  line={line3}
-                  heading="Peak Times"
-                  value="10am to 6pm"
-                  // value={`${apiData.peak_times[0].hour} - ${apiData.peak_times[0].count} users`}
-                  comment={`Data for ${apiData.peak_times.length} peak hours`}
-                />
-              </div>
-            </>
+                    value: uniqueUsersData,
+                    param: "unique_users",
+                  })
+                }
+              />
+            </div>
+          )}
+          {peakTimesData && peakTimesData.peak_times && (
+            <div className="col-12 col-md-6 col-xl-4">
+              <Dashboardcard
+                number="three"
+                icon={icon3}
+                line={line3}
+                heading="Peak Times"
+                value={`${peakTimesData.peak_times.start_time} - ${peakTimesData.peak_times.end_time}`}
+                comment={`Data for ${peakTimesData.peak_times.peak_hours_count} peak hours`}
+                onClick={() =>
+                  handleCardClick({
+                    heading: "Peak Times",
+                    value: peakTimesData.peak_times,
+                    param: "peak_times",
+                  })
+                }
+              />
+            </div>
           )}
         </div>
       </div>
+
       {modalData && (
         <div className="modal show d-block" tabIndex="-1" role="dialog" style={{ background: '#00000082' }}>
           <div className="modal-dialog modal-lg" role="document">
@@ -130,7 +155,7 @@ function Chatanalytics() {
                 <button type="button" className="card-close-btn btn-close" onClick={closeModal} aria-label="Close"></button>
               </div>
               <div className="modal-body text-center">
-                <Chatgraph graphdata={modalData.heading} />
+                <Chatgraph graphdata={modalData} />
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
@@ -143,3 +168,172 @@ function Chatanalytics() {
   );
 }
 export default Chatanalytics;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import line1 from "../assets/img/No.png";
+// import line2 from "../assets/img/Yes.png";
+// import line3 from "../assets/img/Vector 124.png";
+// import icon1 from "../assets/img/icon1.png";
+// import icon2 from "../assets/img/icon2.png";
+// import icon3 from "../assets/img/icon3.png";
+// import Chatgraph from "../components/Chatgraph";
+// function Dashboardcard({ number, icon, line, heading, value, comment, onClick }) {
+//   return (
+//     <>
+//       <div className={`p-4 analytics-card-${number}`} onClick={onClick} style={{ cursor: "pointer" }}>
+//         <div>
+//           <h5>{heading}</h5>
+//           <h2>
+//             <b>{value}</b>
+//           </h2>
+//           <p>
+//             <i className="fa-solid fa-arrow-trend-up"></i> {comment}
+//           </p>
+//           <img src={icon} className="img-fluid card-message-icon" alt="" />
+//           <div className="line-wrap">
+//             <div>
+//               <img src={line} alt="" className="img-fluid " />
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
+// function Chatanalytics() {
+//   const [modalData, setModalData] = useState(null);
+//   const [apiData, setApiData] = useState(null);
+//   useEffect(() => {
+//     // debugger;
+//     const fetchAnalyticsData = async () => {
+//       try {
+//         const response = await fetch('http://20.20.20.72:8000/api/chat/chat_analysis?include=chat_count', {
+//           method: 'GET',
+//           headers: {
+//             'Content-Type': 'application/json'
+//           },
+//         });
+//         if (!response.ok) {
+//           throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//         const data = await response.json();
+//         console.log('Analysis API Response:', data);
+//         setApiData(data);
+//       } catch (error) {
+//         console.error('Error fetching analytics data:', error);
+//       }
+//     };
+//     fetchAnalyticsData();
+//   }, []);
+//   const handleCardClick = (data) => {
+//     setModalData(data);
+//     console.log('graph data', data);
+//   };
+//   const closeModal = () => {
+//     setModalData(null);
+//   };
+//   return (
+//     <>
+//       <div className="container-fluid pt-4 px-4">
+//         <div className="row g-4">
+//           <div className="col-md-12">
+//             <h2>Dashboard</h2>
+//           </div>
+//         </div>
+//         <div className="row g-4">
+//           {apiData && (
+//             <>
+//               <div className="col-12 col-md-6 col-xl-4">
+//                 <Dashboardcard
+//                   number="one"
+//                   icon={icon1}
+//                   line={line1}
+//                   heading="Total Chats"
+//                   value={apiData.total_chats}
+//                   comment={`${apiData.total_chats_percentage_change} change`}
+//                   onClick={() => handleCardClick({
+//                     heading: "Total Chats",
+//                     value: apiData.total_chats,
+//                     comment: `${apiData.total_chats_percentage_change} change`,
+//                   })}
+//                 />
+//               </div>
+//               <div className="col-12 col-md-6 col-xl-4">
+//                 <Dashboardcard
+//                   number="two"
+//                   icon={icon2}
+//                   line={line2}
+//                   heading="Unique Users"
+//                   value={apiData.unique_users}
+//                   comment={`${apiData.unique_users_percentage_change} change`}
+//                   onClick={() => handleCardClick({
+//                     heading: "Unique Users",
+//                     value: apiData.unique_users,
+//                     comment: `${apiData.unique_users_percentage_change} change`,
+//                   })}
+//                 />
+//               </div>
+//               <div className="col-12 col-md-6 col-xl-4">
+//                 <Dashboardcard
+//                   number="three"
+//                   icon={icon3}
+//                   line={line3}
+//                   heading="Peak Times"
+//                   value={`${apiData.peak_times[0].hour} - ${apiData.peak_times[0].count} users`}
+//                   comment={`Data for ${apiData.peak_times.length} peak hours`}
+//                 />
+//               </div>
+//             </>
+//           )}
+//         </div>
+//       </div>
+//       {modalData && (
+//         <div className="modal show d-block" tabIndex="-1" role="dialog" style={{ background: '#00000082' }}>
+//           <div className="modal-dialog modal-lg" role="document">
+//             <div className="modal-content card-modal">
+//               <div className="modal-header">
+//                 <h5 className="modal-title">{modalData.heading}</h5>
+//                 <button type="button" className="card-close-btn btn-close" onClick={closeModal} aria-label="Close"></button>
+//               </div>
+//               <div className="modal-body text-center">
+//                 <Chatgraph graphdata={modalData.heading} />
+//               </div>
+//               <div className="modal-footer">
+//                 <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </>
+//   );
+// }
+// export default Chatanalytics;

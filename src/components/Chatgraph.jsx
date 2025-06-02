@@ -11,9 +11,10 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  Filler,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, ArcElement);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, ArcElement, Filler);
 
 function Chatgraph({ graphdata }) {
   const [chartType, setChartType] = useState("line");
@@ -25,21 +26,20 @@ function Chatgraph({ graphdata }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const token = localStorage.getItem('authToken');
         const apiInclude =
-          graphdata === "Total Chats"
+          graphdata.heading === "Total Chats"
             ? "chat_count"
-            : graphdata === "Unique Users"
+            : graphdata.heading === "Unique Users"
               ? "unique_users"
-              : graphdata === "Peak Times"
+              : graphdata.heading === "Peak Times"
                 ? "peak_times"
                 : "";
-        const apiUrl = `https://bot.devspandas.com/api/chat/last-6-months-chats?include=${apiInclude}`;
+        const apiUrl = `https://bot.devspandas.com/api/chat/last_6_months_chats?include=${apiInclude}`;
+        console.log('apiUrl', apiUrl)
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
           },
         });
         if (!response.ok) {
@@ -49,7 +49,7 @@ function Chatgraph({ graphdata }) {
         console.log("Raw API Response:", apiData);
         let labels = [];
         let dataValues = [];
-        if (graphdata === "Total Chats") {
+        if (graphdata.heading === "Total Chats") {
           const rawData = apiData.chat_counts || {};
           labels = Object.keys(rawData);
           dataValues = Object.values(rawData);
@@ -58,7 +58,7 @@ function Chatgraph({ graphdata }) {
             labels,
             dataValues,
           });
-        } else if (graphdata === "Unique Users") {
+        } else if (graphdata.heading === "Unique Users") {
           const rawData = apiData.unique_users_counts || {};
           labels = Object.keys(rawData);
           dataValues = Object.values(rawData);
@@ -67,21 +67,12 @@ function Chatgraph({ graphdata }) {
             labels,
             dataValues,
           });
-        } else if (graphdata === "Peak Times") {
+        } else if (graphdata.heading === "Peak Times") {
           const rawData = apiData.peak_times || {};
-          const aggregatedData = [];
-          for (const [month, entries] of Object.entries(rawData)) {
-            if (entries.length > 0) {
-              aggregatedData.push({ label: month, value: null });
-              for (const [day, count] of entries) {
-                aggregatedData.push({ label: `  ${day}`, value: count });
-              }
-            }
-          }
-          labels = aggregatedData.map((item) => item.label);
-          dataValues = aggregatedData.map((item) => item.value);
+          labels = Object.keys(rawData);
+          dataValues = Object.values(rawData);
           setGraphData({
-            heading: "Peak Times",
+            heading: "Chat Volume by Time Range",
             labels,
             dataValues,
           });
