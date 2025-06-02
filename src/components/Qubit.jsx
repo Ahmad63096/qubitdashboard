@@ -70,7 +70,23 @@ function Qubit({ bot_type }) {
       alert("Failed to save settings. Please try again.");
     }
   };
-
+  const handleTxtFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === "text/plain") {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const fileText = event.target.result;
+        setSettings((prev) => ({
+          ...prev,
+          predefined_intents: fileText,
+        }));
+      };
+      reader.readAsText(file);
+    } else {
+      alert("Please upload a valid .txt file.");
+    }
+  };
+  
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
     setSettings((prev) => ({
@@ -169,23 +185,6 @@ function Qubit({ bot_type }) {
                 Change behaviour of bot
               </label>
             </div> 
-            {/* <div className="col-md-6 p-3">
-              <h5 className="mb-3">Tone</h5>
-              <input type="text" list="toneOptions" id="tone"
-                className="form-control main-search"
-                placeholder="Select or type tone"
-                value={settings.tone}
-                onChange={handleChange}
-              />
-              <datalist id="toneOptions">
-                <option value="professional" />
-                <option value="formal" />
-                <option value="friendly" />
-              </datalist>
-              <label htmlFor="tone" className="form-label">
-                Choose from suggestions or type a custom tone.
-              </label>
-            </div> */}
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Disable Bot</h5>
               <div className="form-check form-switch">
@@ -297,6 +296,7 @@ function Qubit({ bot_type }) {
               <label htmlFor="predefined_intents" className="form-label">
                 *Write your Predefined Intents.
               </label>
+              <input type="file" accept=".txt" onChange={handleTxtFileUpload}/>
             </div>
             <div className="col-md-6 p-3">
               <h5 className="mb-3">Greeting Message</h5>
