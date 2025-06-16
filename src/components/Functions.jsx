@@ -1,7 +1,7 @@
 // components/Functions.js
 const handleDownload = (chatId, fileType, client_name) => {
   const token = localStorage.getItem('authToken');
-  const url = `https://bot.devspandas.com/api/export/export-file/?file_type=${fileType}&object_id=${chatId}`;
+  const url = `${process.env.REACT_APP_CHAT_EXPORT}/?file_type=${fileType}&object_id=${chatId}`;
   console.log('type or id', chatId, fileType);
   fetch(url, {
     headers: {

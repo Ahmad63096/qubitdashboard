@@ -34,7 +34,7 @@ function Chatgraph({ graphdata }) {
               : graphdata.heading === "Peak Times"
                 ? "peak_times"
                 : "";
-        const apiUrl = `https://bot.devspandas.com/api/chat/last_6_months_chats?include=${apiInclude}`;
+        const apiUrl = `${process.env.REACT_APP_LAST_SIX_MONTHCHATS}?include=${apiInclude}`;
         console.log('apiUrl', apiUrl)
         const response = await fetch(apiUrl, {
           method: "GET",

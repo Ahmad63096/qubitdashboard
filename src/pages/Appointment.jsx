@@ -10,7 +10,7 @@ function Appointment() {
   const [sortTimeAsc, setSortTimeAsc] = useState(true);
   const fetchAppointments = async () => {
     try {
-      const response = await fetch("https://bot.devspandas.com/api/appointment/get_appointments");
+      const response = await fetch(`${process.env.REACT_APP_APPOINTMENT}/get_appointments`);
       if (!response.ok) throw new Error("Failed to fetch data");
       const data = await response.json();
       const fetchedAppointments = data.appointments.map((item, index) => ({
@@ -48,7 +48,7 @@ function Appointment() {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`https://bot.devspandas.com/api/appointment/delete_appointment?id=${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_APPOINTMENT}/delete_appointment?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {

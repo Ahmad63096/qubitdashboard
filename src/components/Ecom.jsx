@@ -23,7 +23,7 @@ const [successMessage, setSuccessMessage] = useState("");
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch("https://bot.devspandas.com/api/panel/control-panel-settings/");
+        const response = await fetch(`${process.env.REACT_APP_GENERAL_SETTING}/control-panel-settings/`);
         if (!response.ok) {
           throw new Error("Failed to fetch settings");
         }
@@ -63,7 +63,7 @@ const [successMessage, setSuccessMessage] = useState("");
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      const response = await fetch(process.env.REACT_APP_GENERAL_SETTING, {
+      const response = await fetch(`${process.env.REACT_APP_GENERAL_SETTING}/create-control-panel-settings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

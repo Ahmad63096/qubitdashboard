@@ -8,7 +8,7 @@ console.log("edit appointment data",appointment);
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `https://bot.devspandas.com/api/appointment/update_appointment?id=${appointment.id}`,
+        `${process.env.REACT_APP_APPOINTMENT}/update_appointment?id=${appointment.id}`,
         {
           method: "PUT", 
           headers: {

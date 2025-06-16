@@ -24,8 +24,7 @@ function Reports() {
     };
     console.log("Form Data Submitted: ", formData);
     try {
-      const response = await fetch(
-        'https://bot.devspandas.com/api/export/generate-report',
+      const response = await fetch(process.env.REACT_APP_GENERATE_REPORT,
         {
           method: 'POST',
           headers: {

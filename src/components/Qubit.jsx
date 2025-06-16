@@ -23,7 +23,7 @@ function Qubit({ bot_type }) {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch("https://bot.devspandas.com/api/panel/control-panel-settings");
+        const response = await fetch(`${process.env.REACT_APP_GENERAL_SETTING}/control-panel-settings`);
         if (!response.ok) {
           throw new Error("Failed to fetch settings");
         }
@@ -48,7 +48,7 @@ function Qubit({ bot_type }) {
     console.log('submited data', settings);
     e.preventDefault();
     try {
-      const response = await fetch("https://bot.devspandas.com/api/panel/create-control-panel-settings", {
+      const response = await fetch(`${process.env.REACT_APP_GENERAL_SETTING}/create-control-panel-settings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
