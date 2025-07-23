@@ -37,7 +37,7 @@ function Chatanalytics() {
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    const fetchMetric = async (metric) => {
+      const fetchMetric = async (metric) => {
       try {
         const response = await fetch(`${process.env.REACT_APP_CHATS}/chat_analysis?include=${metric}`, {
           method: 'GET',

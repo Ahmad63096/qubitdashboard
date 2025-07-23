@@ -2,7 +2,7 @@
 const handleDownload = (chatId, fileType, client_name) => {
   const token = localStorage.getItem('authToken');
   const url = `${process.env.REACT_APP_CHAT_EXPORT}/?file_type=${fileType}&object_id=${chatId}`;
-  console.log('type or id', chatId, fileType);
+  // console.log('type or id', chatId, fileType);
   fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
