@@ -36,10 +36,12 @@ function Chatgraph({ graphdata }) {
                 : "";
         const apiUrl = `${process.env.REACT_APP_LAST_SIX_MONTHCHATS}?include=${apiInclude}`;
         // console.log('apiUrl', apiUrl)
+        const token = localStorage.getItem('authToken');
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
         });
         if (!response.ok) {

@@ -24,11 +24,13 @@ function Reports() {
     };
     // console.log("Form Data Submitted: ", formData);
     try {
+      const token = localStorage.getItem('authToken');
       const response = await fetch(process.env.REACT_APP_GENERATE_REPORT,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }

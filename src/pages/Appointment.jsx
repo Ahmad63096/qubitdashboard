@@ -10,11 +10,18 @@ function Appointment() {
   const [sortTimeAsc, setSortTimeAsc] = useState(true);
   const fetchAppointments = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_APPOINTMENT}/get_appointments`);
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`${process.env.REACT_APP_APPOINTMENT}/get_appointments`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (!response.ok) throw new Error("Failed to fetch data");
+
       const data = await response.json();
       const fetchedAppointments = data.appointments.map((item, index) => ({
-        id: item.id, 
+        id: item.id,
         name: item.client_name,
         date: item.preferred_date,
         time: item.preferred_time,
@@ -22,6 +29,7 @@ function Appointment() {
         necessity: item.service,
         status: item.demo_status.charAt(0).toUpperCase() + item.demo_status.slice(1),
       }));
+
       setAppointments(fetchedAppointments);
     } catch (error) {
       console.error("Error fetching appointments:", error);
@@ -48,8 +56,12 @@ function Appointment() {
     if (!confirmDelete) return;
 
     try {
+      const token = localStorage.getItem('authToken');
       const response = await fetch(`${process.env.REACT_APP_APPOINTMENT}/delete_appointment?id=${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error("Failed to delete appointment");

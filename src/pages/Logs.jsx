@@ -7,9 +7,9 @@ function Logs() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-const [isSearching, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [pageCount, setPageCount] = useState(0);
-  const [activePage, setActivePage] = useState(1); 
+  const [activePage, setActivePage] = useState(1);
   const chatLogRef = useRef(null);
   const fetchChats = (page = 1) => {
     const token = localStorage.getItem('authToken');
@@ -29,7 +29,7 @@ const [isSearching, setIsSearching] = useState(false);
         // console.log('All chats',data.chats);
         setChats(data.chats || []);
         setPageCount(data.total_pages || 1);
-        setSelectedChat(0); 
+        setSelectedChat(0);
         setLoading(false);
       })
       .catch((error) => {
@@ -62,7 +62,7 @@ const [isSearching, setIsSearching] = useState(false);
         setError(error.message);
         setLoading(false);
       });
-  }; 
+  };
   useEffect(() => {
     fetchChats(activePage);
   }, [activePage]);
@@ -110,27 +110,27 @@ const [isSearching, setIsSearching] = useState(false);
       <div className="row g-4">
         <div className="col-sm-12 col-md-6 col-xl-4">
           <div className="h-100 rounded p-4" id="style-3">
-        <form className="d-none d-md-flex mb-4">
-        <input
-  className="form-control main-search"
-  type="search"
-  placeholder="Search"
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  onKeyDown={(e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (searchTerm.trim() === '') {
-        setIsSearching(false);
-        fetchChats(1); // fallback to all chats
-      } else {
-        setIsSearching(true);
-        searchChats(searchTerm.trim());
-      }
-    }
-  }}
-/>
-        </form>
+            <form className="d-none d-md-flex mb-4">
+              <input
+                className="form-control main-search"
+                type="search"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (searchTerm.trim() === '') {
+                      setIsSearching(false);
+                      fetchChats(1); // fallback to all chats
+                    } else {
+                      setIsSearching(true);
+                      searchChats(searchTerm.trim());
+                    }
+                  }
+                }}
+              />
+            </form>
             <div
               className="chat-log-scroll"
               ref={chatLogRef}
@@ -211,7 +211,7 @@ const [isSearching, setIsSearching] = useState(false);
                       <li>
                         <button
                           className="dropdown-item"
-                          onClick={() => handleDownload(chats[selectedChat].id, "pdf",chats[selectedChat].client_name)}
+                          onClick={() => handleDownload(chats[selectedChat].id, "pdf", chats[selectedChat].client_name)}
                         >
                           <i className="fa-solid fa-file-pdf"></i> Download PDF
                         </button>
@@ -219,7 +219,7 @@ const [isSearching, setIsSearching] = useState(false);
                       <li>
                         <button
                           className="dropdown-item"
-                          onClick={() => handleDownload(chats[selectedChat].id, "csv",chats[selectedChat].client_name)}
+                          onClick={() => handleDownload(chats[selectedChat].id, "csv", chats[selectedChat].client_name)}
                         >
                           <i className="fa-solid fa-file-csv"></i> Download CSV
                         </button>
