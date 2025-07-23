@@ -23,7 +23,7 @@ function Chart() {
             },
           }
         );
-        console.log('graph response is :', response);
+        // console.log('graph response is :', response);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

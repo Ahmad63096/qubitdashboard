@@ -46,7 +46,7 @@ function Chatlog() {
         return response.json();
       })
       .then((data) => {
-        console.log("API response data is:", data);
+        // console.log("API response data is:", data);
         const recentChats = data.chats
           .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
           .slice(0, 20);

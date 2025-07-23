@@ -190,7 +190,7 @@ function GreetingMessage() {
         : { farewell_message: formData.farewell_message };
 
     // Log the form data to the console
-    console.log('Form data being submitted:', payload);
+    // console.log('Form data being submitted:', payload);
 
     try {
       const token = localStorage.getItem("authToken");
@@ -206,7 +206,7 @@ function GreetingMessage() {
       if (response.ok) {
         const data = await response.json();
         setResponseMessage('Message updated successfully!');
-        console.log('Response:', data);
+        // console.log('Response:', data);
 
         // Clear the relevant input
         setFormData((prevData) => ({

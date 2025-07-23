@@ -4,7 +4,7 @@ function EditAppointmentModal({ appointment, onClose, onSave }) {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-console.log("edit appointment data",appointment);
+// console.log("edit appointment data",appointment);
   const handleSubmit = async () => {
     try {
       const response = await fetch(

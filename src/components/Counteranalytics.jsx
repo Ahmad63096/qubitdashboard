@@ -14,7 +14,7 @@ function Counteranalytics() {
         });
         if (!response.ok) throw new Error('Failed to fetch session data');
         const data = await response.json();
-        console.log('counter data', data);
+        // console.log('counter data', data);
         const targetValues = [
           data.total_sessions,
           Math.round(data.average_duration),

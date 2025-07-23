@@ -22,7 +22,7 @@ function Reports() {
       fileFormat: e.target.fileFormat.value,
       tags,
     };
-    console.log("Form Data Submitted: ", formData);
+    // console.log("Form Data Submitted: ", formData);
     try {
       const response = await fetch(process.env.REACT_APP_GENERATE_REPORT,
         {
@@ -41,7 +41,7 @@ function Reports() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.log('Response from API:', data);
+      // console.log('Response from API:', data);
       setMessage({ text: "Report generated and sent successfully!", type: "success" });
       setTimeout(() => {
         window.location.reload();

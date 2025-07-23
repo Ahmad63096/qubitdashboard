@@ -26,7 +26,7 @@ const [isSearching, setIsSearching] = useState(false);
         return response.json();
       })
       .then((data) => {
-        console.log('All chats',data.chats);
+        // console.log('All chats',data.chats);
         setChats(data.chats || []);
         setPageCount(data.total_pages || 1);
         setSelectedChat(0); 
@@ -52,7 +52,7 @@ const [isSearching, setIsSearching] = useState(false);
         return response.json();
       })
       .then((data) => {
-        console.log('search data',data);
+        // console.log('search data',data);
         setChats(data.chats || []);
         setPageCount(1); // disable pagination for search results
         setSelectedChat(0);

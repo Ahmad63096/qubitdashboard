@@ -28,7 +28,7 @@ function Qubit({ bot_type }) {
           throw new Error("Failed to fetch settings");
         }
         const data = await response.json();
-        console.log("Fetched settings:", data.data);
+        // console.log("Fetched settings:", data.data);
         setSettings(prev => ({
           ...prev,
           ...structuredClone(settings),
@@ -45,7 +45,7 @@ function Qubit({ bot_type }) {
     // eslint-disable-next-line
   }, []);
   const handleSubmit = async (e) => {
-    console.log('submited data', settings);
+    // console.log('submited data', settings);
     e.preventDefault();
     try {
       const response = await fetch(`${process.env.REACT_APP_GENERAL_SETTING}/create-control-panel-settings`, {

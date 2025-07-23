@@ -70,7 +70,7 @@ function Chatanalytics() {
 
   const handleCardClick = (data) => {
     setModalData(data);
-    console.log('graph data', data);
+    // console.log('graph data', data);
   };
 
   const closeModal = () => {

@@ -35,7 +35,7 @@ function Chatgraph({ graphdata }) {
                 ? "peak_times"
                 : "";
         const apiUrl = `${process.env.REACT_APP_LAST_SIX_MONTHCHATS}?include=${apiInclude}`;
-        console.log('apiUrl', apiUrl)
+        // console.log('apiUrl', apiUrl)
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -46,7 +46,7 @@ function Chatgraph({ graphdata }) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const apiData = await response.json();
-        console.log("Raw API Response:", apiData);
+        // console.log("Raw API Response:", apiData);
         let labels = [];
         let dataValues = [];
         if (graphdata.heading === "Total Chats") {
